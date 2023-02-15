@@ -22,7 +22,6 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
 
     }
     
-    
     func setupAVCapture() {
         var deviceInput: AVCaptureDeviceInput!
         
