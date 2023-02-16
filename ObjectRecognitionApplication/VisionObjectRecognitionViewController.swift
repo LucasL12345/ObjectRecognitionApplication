@@ -35,17 +35,63 @@ class VisionObjectRecognitionViewController: ViewController {
     }
     
     func drawVisionRequestResults(_ results: [Any]) {
-      
+        CATransaction.begin()
+        CATransaction.setValue(kCFBooleanTrue, forKey: kCATransactionDisableActions)
+        detectionOverlay.sublayers = nil // remove old recognized objects
+        
+        for observation in results where observation is VNRecognizedObjectObservation {
+            guard let objectObservation = observation as? VNRecognizedObjectObservation else {
+                continue
+            }
+            // select the label with the highest confidence
+            let topLabelObservation = objectObservation.labels[0]
+            let objectBounds = VNImageRectForNormalizedRect(objectObservation.boundingBox, Int(bufferSize.width), Int(bufferSize.height))
+            
+            
+            let shapeLayer = self.createRoundedRectLayerWithBounds(objectBounds)
+            
+            let textLayer = self.createTextSubLayerInBounds(objectBounds,
+                                                            identifier: topLabelObservation.identifier,
+                                                            confidence: topLabelObservation.confidence)
+            shapeLayer.addSublayer(textLayer)
+            detectionOverlay.addSublayer(shapeLayer)
+            
+        }
+        self.updateLayerGeometry()
+        CATransaction.commit()
     }
     
     override func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+ 
     }
     
     override func setupAVCapture() {
-       
+
     }
     
-   
+    
+    func setupLayers() {
+         
+     }
+     
+     func updateLayerGeometry() {
+         
+     }
+     
+    
+    func createTextSubLayerInBounds(_ bounds: CGRect, identifier: String, confidence: VNConfidence) -> CATextLayer {
+        let textLayer = CATextLayer()
+        textLayer.name = "Object Label"
+        return textLayer
+    }
+    
+    func createRoundedRectLayerWithBounds(_ bounds: CGRect) -> CALayer {
+        let shapeLayer = CALayer()
+        shapeLayer.name = "Found Object"
+        return shapeLayer
+    }
+
+    
 
 
 }
