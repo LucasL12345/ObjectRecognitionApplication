@@ -75,12 +75,23 @@ class VisionObjectRecognitionViewController: ViewController {
     }
     
     override func setupAVCapture() {
-
+        super.setupAVCapture()
+        setupLayers()
+        updateLayerGeometry()
+        setupVision()
+        startCaptureSession()
     }
     
     
     func setupLayers() {
-         
+        detectionOverlay = CALayer() // container layer that has all the renderings of the observations
+        detectionOverlay.name = "DetectionOverlay"
+        detectionOverlay.bounds = CGRect(x: 0.0,
+                                         y: 0.0,
+                                         width: bufferSize.width,
+                                         height: bufferSize.height)
+        detectionOverlay.position = CGPoint(x: rootLayer.bounds.midX, y: rootLayer.bounds.midY)
+        rootLayer.addSublayer(detectionOverlay)
      }
      
      func updateLayerGeometry() {
