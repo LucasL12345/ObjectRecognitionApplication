@@ -84,7 +84,25 @@ class VisionObjectRecognitionViewController: ViewController {
      }
      
      func updateLayerGeometry() {
+         let bounds = rootLayer.bounds
+         var scale: CGFloat
          
+         let xScale: CGFloat = bounds.size.width / bufferSize.height
+         let yScale: CGFloat = bounds.size.height / bufferSize.width
+         
+         scale = fmax(xScale, yScale)
+         if scale.isInfinite {
+             scale = 1.0
+         }
+         CATransaction.begin()
+         CATransaction.setValue(kCFBooleanTrue, forKey: kCATransactionDisableActions)
+         
+         // rotate layer into screen orientation, scale, and mirror
+         detectionOverlay.setAffineTransform(CGAffineTransform(rotationAngle: CGFloat(.pi / 2.0)).scaledBy(x: scale, y: -scale))
+         // center layer
+         detectionOverlay.position = CGPoint(x: bounds.midX, y: bounds.midY)
+         
+         CATransaction.commit()
      }
      
     
