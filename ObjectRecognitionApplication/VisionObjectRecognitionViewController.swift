@@ -4,9 +4,9 @@ import Vision
 
 class VisionObjectRecognitionViewController: ViewController {
     
-    private var detectionOverlay: CALayer! = nil
+    internal var detectionOverlay: CALayer! = nil
     // Vision parts
-    private var requests = [VNRequest]()
+    internal var requests = [VNRequest]()
     
     @discardableResult
     func setupVision() -> NSError? {

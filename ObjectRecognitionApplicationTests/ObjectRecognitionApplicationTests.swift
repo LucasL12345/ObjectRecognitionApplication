@@ -1,25 +1,19 @@
-//
-//  ObjectRecognitionApplicationTests.swift
-//  ObjectRecognitionApplicationTests
-//
-//  Created by Lucas Lemoine on 19/02/2023.
-//  Copyright © 2023 Apple. All rights reserved.
-//
-
 import XCTest
 
 @testable import ObjectRecognitionApplication
 
 final class ObjectRecognitionApplicationTests: XCTestCase {
     
+    var viewController: VisionObjectRecognitionViewController!
+    
     override func setUpWithError() throws {
+        try super.setUpWithError()
+        viewController = VisionObjectRecognitionViewController()
     }
 
     override func tearDownWithError() throws {
-    }
-
-    func testExample() throws {
-
+        try super.tearDownWithError()
+        viewController = nil
     }
     
     func testSetupVision() throws {
@@ -35,6 +29,23 @@ final class ObjectRecognitionApplicationTests: XCTestCase {
         XCTAssertEqual(textLayer.bounds, bounds, "Expected text layer bounds to match input bounds")
         XCTAssertEqual(textLayer.string as? String, "Test (80%)", "Expected text layer string to include object identifier and confidence percentage")
     }
+    
+    func testSetupAVCapture() throws {
+        viewController.setupAVCapture()
+        XCTAssertNotNil(viewController.previewLayer, "Expected preview layer to be set up")
+        XCTAssertEqual(viewController.rootLayer.sublayers?.count, 1, "Expected one sublayer in root layer")
+        XCTAssertNotNil(viewController.session, "Expected session to be set up")
+    }
+
+    func testUpdateLayerGeometry() throws {
+        viewController.setupAVCapture()
+        let initialBounds = viewController.detectionOverlay.bounds
+        viewController.previewView.bounds = CGRect(x: 0, y: 0, width: 200, height: 300)
+        viewController.updateLayerGeometry()
+        XCTAssertNotEqual(viewController.detectionOverlay.bounds, initialBounds, "Expected detection overlay bounds to change after updating geometry")
+        XCTAssertEqual(viewController.detectionOverlay.position, CGPoint(x: 100, y: 150), "Expected detection overlay to be centered in preview view")
+    }
+
 
 }
 
