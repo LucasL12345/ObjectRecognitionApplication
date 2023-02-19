@@ -16,9 +16,36 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         // to be implemented in the subclass
     }
     
+    
+    let findObjectButton: UIButton = {
+            let button = UIButton(type: .system)
+        button.backgroundColor = .white
+        button.backgroundColor = button.backgroundColor?.withAlphaComponent(0.75)
+        button.layer.borderWidth = 1.0
+        button.layer.borderColor = UIColor.black.cgColor
+        button.layer.cornerRadius = 10
+        button.setTitle("Finding all objects", for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
+        button.setTitleColor(.black, for: .normal)
+        button.addTarget(self, action: #selector(VisionObjectRecognitionViewController.button2), for: .touchUpInside)
+        return button
+    }()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupAVCapture()
+        
+        view.addSubview(findObjectButton)
+        findObjectButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+                    findObjectButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+                    findObjectButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+                    findObjectButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -10),
+                    findObjectButton.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1/3)
+                ])
+
 
     }
     

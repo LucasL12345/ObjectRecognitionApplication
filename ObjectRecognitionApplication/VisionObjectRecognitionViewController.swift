@@ -130,6 +130,14 @@ class VisionObjectRecognitionViewController: ViewController {
     }
 
     
+    
+    @IBAction func button2(_ sender: Any) {
+        print("pressed")
+    }
 
-
+ 
 }
+    
+
+
+
