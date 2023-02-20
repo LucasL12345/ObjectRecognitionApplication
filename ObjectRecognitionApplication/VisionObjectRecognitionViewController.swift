@@ -34,6 +34,7 @@ class VisionObjectRecognitionViewController: ViewController {
         return error
     }
     
+    
     func drawVisionRequestResults(_ results: [Any]) {
         CATransaction.begin()
         CATransaction.setValue(kCFBooleanTrue, forKey: kCATransactionDisableActions)
@@ -61,6 +62,7 @@ class VisionObjectRecognitionViewController: ViewController {
         CATransaction.commit()
     }
     
+    
     override func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
             return
@@ -73,6 +75,7 @@ class VisionObjectRecognitionViewController: ViewController {
             print(error)
         }
     }
+    
     
     override func setupAVCapture() {
         super.setupAVCapture()
@@ -94,6 +97,7 @@ class VisionObjectRecognitionViewController: ViewController {
         rootLayer.addSublayer(detectionOverlay)
      }
      
+    
      func updateLayerGeometry() {
          let bounds = rootLayer.bounds
          var scale: CGFloat
@@ -120,16 +124,35 @@ class VisionObjectRecognitionViewController: ViewController {
     func createTextSubLayerInBounds(_ bounds: CGRect, identifier: String, confidence: VNConfidence) -> CATextLayer {
         let textLayer = CATextLayer()
         textLayer.name = "Object Label"
+        let confidenceValue = Float(confidence)
+        let formattedString = NSMutableAttributedString(string: String(format: "\(identifier) (%.0f%%)", confidenceValue * 100))
+        let largeFont = UIFont(name: "Helvetica", size: 24.0)!
+        formattedString.addAttributes([NSAttributedString.Key.font: largeFont], range: NSRange(location: 0, length: identifier.count))
+        textLayer.string = formattedString
+        
+        textLayer.bounds = CGRect(x: 0, y: 0, width: bounds.size.height, height: bounds.size.width)
+        textLayer.position = CGPoint(x: bounds.midX, y: bounds.midY)
+        textLayer.shadowOpacity = 0.5
+        textLayer.shadowOffset = CGSize(width: 2, height: 2)
+        textLayer.foregroundColor = CGColor(colorSpace: CGColorSpaceCreateDeviceRGB(), components: [1.0, 1.0, 1.0, 1.0])
+        textLayer.contentsScale = 2.0 // retina rendering
+        
+        // rotate the layer into screen orientation and scale and mirror
+        textLayer.setAffineTransform(CGAffineTransform(rotationAngle: CGFloat(.pi / 2.0)).scaledBy(x: 1.0, y: -1.0))
         return textLayer
     }
-    
+
+
     func createRoundedRectLayerWithBounds(_ bounds: CGRect) -> CALayer {
         let shapeLayer = CALayer()
+        shapeLayer.bounds = bounds
+        shapeLayer.position = CGPoint(x: bounds.midX, y: bounds.midY)
         shapeLayer.name = "Found Object"
+        shapeLayer.backgroundColor = CGColor(colorSpace: CGColorSpaceCreateDeviceRGB(), components: [1.0, 1.0, 1.0, 0.2])
+        shapeLayer.cornerRadius = 7
         return shapeLayer
     }
 
-    
     
     @IBAction func button2(_ sender: Any) {
         print("pressed")
