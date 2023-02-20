@@ -74,27 +74,42 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         super.viewDidLoad()
         setupAVCapture()
         
+        view.addSubview(informationButton)
+        informationButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(optionButton)
+        optionButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(findObjectButton)
         findObjectButton.translatesAutoresizingMaskIntoConstraints = false
-        
+
         NSLayoutConstraint.activate([
-                    findObjectButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-                    findObjectButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-                    findObjectButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -10),
-                    findObjectButton.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1/3),
-                    
-                    optionButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
-                    optionButton.leadingAnchor.constraint(equalTo: informationButton.trailingAnchor, constant: 10),
-                    optionButton.heightAnchor.constraint(equalToConstant: 90),
-                    optionButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+            informationButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1/3),
+            informationButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
+            informationButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+            informationButton.heightAnchor.constraint(equalToConstant: 90),
 
-                    findObjectButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-                    findObjectButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-                    findObjectButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -10),
-                    findObjectButton.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1/3)
-                ])
+//            optionButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 2/3),
+            optionButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
+            optionButton.leadingAnchor.constraint(equalTo: informationButton.trailingAnchor, constant: 10),
+            optionButton.heightAnchor.constraint(equalToConstant: 90),
+            optionButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
 
 
+            findObjectButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+            findObjectButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+            findObjectButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -10),
+            findObjectButton.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1/3)
+        ])
+
+    }
+    
+    @objc func showOptions() {
+        let optionsVC = OptionsViewController()
+        present(optionsVC, animated: true, completion: nil)
+    }
+    
+    @objc func showInformation() {
+        let informationVC = InformationViewController()
+        present(informationVC, animated: true, completion: nil)
     }
     
     func setupAVCapture() {
