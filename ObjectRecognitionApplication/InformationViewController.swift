@@ -31,7 +31,7 @@ class InformationViewController: UIViewController {
         self.view.addSubview(titleLabel)
         
         let paragraphLabel = UILabel()
-        paragraphLabel.text = "jsdbfkajsdhbfsajkfdb"
+        paragraphLabel.text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed fringilla orci ac leo aliquet congue. Nulla non blandit justo. Nullam non mauris pellentesque, placerat nulla vel, semper libero. Nunc et tempor dolor."
         
         paragraphLabel.textAlignment = .center
         paragraphLabel.numberOfLines = 0
@@ -39,6 +39,14 @@ class InformationViewController: UIViewController {
         paragraphLabel.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(paragraphLabel)
         
+        NSLayoutConstraint.activate([
+            titleLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            titleLabel.topAnchor.constraint(equalTo: backButton.bottomAnchor, constant: 30),
+            paragraphLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            paragraphLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
+            paragraphLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
+            paragraphLabel.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
+        ])
     }
     
     @objc func backButtonTapped() {
