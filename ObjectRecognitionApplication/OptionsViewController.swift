@@ -3,7 +3,7 @@ import UIKit
 class OptionsViewController: UIViewController {
 
     var buttons: [UIButton] = []
-    var items = ["a", "b", "c", "d", "e", "f"]
+    var items = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "i", "j", "i", "j", "i", "j"]
     var buttonColors: [UIColor] = []
     
     let titleLabel: UILabel = {
@@ -79,6 +79,32 @@ class OptionsViewController: UIViewController {
                 buttonColors.append(button.backgroundColor ?? .white)
             }
         }
+        
+        let confirmButton = UIButton(type: .system)
+        confirmButton.backgroundColor = .systemBlue
+        confirmButton.layer.borderWidth = 1.0
+        confirmButton.layer.borderColor = UIColor.black.cgColor
+        confirmButton.layer.cornerRadius = 10
+        confirmButton.setTitle("Confirm", for: .normal)
+        confirmButton.setTitleColor(.white, for: .normal)
+        confirmButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
+        confirmButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        confirmButton.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(confirmButton)
+
+        let buttonCount = CGFloat(buttons.count)
+        let confirmButtonTopAnchor = buttonCount > 0 ? buttons[0].bottomAnchor : titleLabel.bottomAnchor
+        let confirmButtonHeight = min(120, self.view.safeAreaLayoutGuide.layoutFrame.height * 0.2, (self.view.safeAreaLayoutGuide.layoutFrame.maxY - confirmButton.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 10).constant - 20) / CGFloat(buttonCount))
+
+        
+
+
+        NSLayoutConstraint.activate([
+            confirmButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
+            confirmButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
+            confirmButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
+            confirmButton.heightAnchor.constraint(equalToConstant: confirmButtonHeight)
+        ])
     }
     
         
