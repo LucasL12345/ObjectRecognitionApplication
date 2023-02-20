@@ -4,6 +4,7 @@ class OptionsViewController: UIViewController {
 
     var buttons: [UIButton] = []
     var items = ["a", "b", "c", "d", "e", "f"]
+    var buttonColors: [UIColor] = []
     
     let titleLabel: UILabel = {
         let label = UILabel()
@@ -48,6 +49,15 @@ class OptionsViewController: UIViewController {
         
         let buttonTitles = items
         
+        // load button colors from user defaults
+        if let savedButtonColors = UserDefaults.standard.array(forKey: "buttonColors") as? [Data] {
+            for savedButtonColor in savedButtonColors {
+                if let color = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(savedButtonColor) as? UIColor {
+                    buttonColors.append(color)
+                }
+            }
+        }
+        
         for i in 0..<buttonTitles.count {
             let button = UIButton()
             button.setTitle(buttonTitles[i], for: .normal)
@@ -61,9 +71,16 @@ class OptionsViewController: UIViewController {
             button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
             buttons.append(button)
             view.addSubview(button)
+            
+            // set button color from array
+            if i < buttonColors.count {
+                button.backgroundColor = buttonColors[i]
+            } else {
+                buttonColors.append(button.backgroundColor ?? .white)
+            }
         }
-        
     }
+    
         
     
     override func viewWillLayoutSubviews() {
@@ -86,9 +103,14 @@ class OptionsViewController: UIViewController {
 
     
     @IBAction func buttonTapped(_ button: UIButton) {
-        print("tapped")
         button.backgroundColor = button.backgroundColor == .white ? .systemBlue : .white
+        buttonColors[button.tag] = button.backgroundColor ?? .white
+        
+        // save button colors to user defaults
+        let savedButtonColors = buttonColors.map { try? NSKeyedArchiver.archivedData(withRootObject: $0, requiringSecureCoding: false) }
+        UserDefaults.standard.set(savedButtonColors, forKey: "buttonColors")
     }
+
     
     @objc func backButtonTapped() {
         self.dismiss(animated: true, completion: nil)
