@@ -92,18 +92,15 @@ class OptionsViewController: UIViewController {
         confirmButton.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(confirmButton)
 
-        let buttonCount = CGFloat(buttons.count)
-        let confirmButtonTopAnchor = buttonCount > 0 ? buttons[0].bottomAnchor : titleLabel.bottomAnchor
-        let confirmButtonHeight = min(120, self.view.safeAreaLayoutGuide.layoutFrame.height * 0.2, (self.view.safeAreaLayoutGuide.layoutFrame.maxY - confirmButton.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 10).constant - 20) / CGFloat(buttonCount))
-
-        
-
+//        let buttonCount = CGFloat(buttons.count)
+//        let confirmButtonTopAnchor = buttonCount > 0 ? buttons[0].bottomAnchor : titleLabel.bottomAnchor
+//        let confirmButtonHeight = min(120, self.view.safeAreaLayoutGuide.layoutFrame.height * 0.2, (self.view.safeAreaLayoutGuide.layoutFrame.maxY - confirmButton.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 10).constant - 20) / CGFloat(buttonCount))
 
         NSLayoutConstraint.activate([
             confirmButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
             confirmButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
             confirmButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
-            confirmButton.heightAnchor.constraint(equalToConstant: confirmButtonHeight)
+            confirmButton.heightAnchor.constraint(equalToConstant: 120)
         ])
     }
     
