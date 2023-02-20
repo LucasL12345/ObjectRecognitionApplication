@@ -24,6 +24,21 @@ class InformationViewController: UIViewController {
             backButton.heightAnchor.constraint(equalToConstant: 80),
         ])
         
+        let titleLabel = UILabel()
+        titleLabel.text = "App Information"
+        titleLabel.font = UIFont.boldSystemFont(ofSize: 32)
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(titleLabel)
+        
+        let paragraphLabel = UILabel()
+        paragraphLabel.text = "jsdbfkajsdhbfsajkfdb"
+        
+        paragraphLabel.textAlignment = .center
+        paragraphLabel.numberOfLines = 0
+        paragraphLabel.font = UIFont.systemFont(ofSize: 22)
+        paragraphLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(paragraphLabel)
+        
     }
     
     @objc func backButtonTapped() {
