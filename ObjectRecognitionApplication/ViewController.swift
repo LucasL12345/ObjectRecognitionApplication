@@ -32,6 +32,44 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     }()
     
     
+    let optionButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.backgroundColor = .white
+        button.backgroundColor = button.backgroundColor?.withAlphaComponent(0.75)
+        button.layer.borderWidth = 1.0
+        button.layer.borderColor = UIColor.black.cgColor
+        button.setTitle("Choose items", for: .normal)
+        button.setTitleColor(.black, for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
+        button.layer.cornerRadius = 10
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(ViewController.showOptions), for: .touchUpInside)
+        if #available(iOS 13.0, *) {
+            button.setImage(UIImage(systemName: "chevron.right"), for: .normal)
+        } else {
+            button.setImage(UIImage(named: "chevron.right"), for: .normal)
+        }
+        button.semanticContentAttribute = .forceRightToLeft
+
+        return button
+    }()
+    
+    let informationButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.backgroundColor = .white
+        button.backgroundColor = button.backgroundColor?.withAlphaComponent(0.75)
+        button.layer.borderWidth = 1.0
+        button.layer.borderColor = UIColor.black.cgColor
+        button.setTitle("App Info", for: .normal)
+        button.setTitleColor(.black, for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
+        button.layer.cornerRadius = 10
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(ViewController.showInformation), for: .touchUpInside)
+        return button
+    }()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupAVCapture()
@@ -40,6 +78,16 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         findObjectButton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
+                    findObjectButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+                    findObjectButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+                    findObjectButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -10),
+                    findObjectButton.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1/3),
+                    
+                    optionButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
+                    optionButton.leadingAnchor.constraint(equalTo: informationButton.trailingAnchor, constant: 10),
+                    optionButton.heightAnchor.constraint(equalToConstant: 90),
+                    optionButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+
                     findObjectButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
                     findObjectButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
                     findObjectButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -10),
