@@ -8,6 +8,11 @@ class VisionObjectRecognitionViewController: ViewController {
     // Vision parts
     internal var requests = [VNRequest]()
     
+    var settingsVC: OptionsViewController!
+
+    var all_items = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p"]
+    var selected_items = ["a", "b", "c"]
+    
     @discardableResult
     func setupVision() -> NSError? {
         // Setup Vision parts
@@ -54,9 +59,23 @@ class VisionObjectRecognitionViewController: ViewController {
             let textLayer = self.createTextSubLayerInBounds(objectBounds,
                                                             identifier: topLabelObservation.identifier,
                                                             confidence: topLabelObservation.confidence)
+            
             shapeLayer.addSublayer(textLayer)
             detectionOverlay.addSublayer(shapeLayer)
             
+            if findObjectButton.currentTitle == "Finding selected items" {
+                for object in selected_items {
+                    if topLabelObservation.identifier == object {
+                        AudioServicesPlayAlertSoundWithCompletion(SystemSoundID(kSystemSoundID_Vibrate)) { }
+                    }
+                }
+            } else {
+                for object in all_items {
+                    if topLabelObservation.identifier == object {
+                        AudioServicesPlayAlertSoundWithCompletion(SystemSoundID(kSystemSoundID_Vibrate)) { }
+                    }
+                }
+            }
         }
         self.updateLayerGeometry()
         CATransaction.commit()
@@ -155,7 +174,13 @@ class VisionObjectRecognitionViewController: ViewController {
 
     
     @IBAction func button2(_ sender: Any) {
-        print("pressed")
+        
+        if findObjectButton.currentTitle == "Finding selected items" {
+            findObjectButton.setTitle("Finding all items", for: .normal)
+        } else {
+            findObjectButton.setTitle("Finding selected items", for: .normal)
+        }
+
     }
 
  

@@ -6,7 +6,7 @@ class OptionsViewController: UIViewController {
     var buttons: [UIButton] = []
     var items = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p"]
     var buttonColors: [UIColor] = []
-    var selectedItems = ["test", "test"]
+    var selected_items = ["a", "b", "c"]
     
     let titleLabel: UILabel = {
         let label = UILabel()
@@ -161,7 +161,7 @@ class OptionsViewController: UIViewController {
     }
     
     @objc func confirmButtonTapped() {
-        let utterance = AVSpeechUtterance(string: "You have selected the following items: \(selectedItems.joined(separator: ", "))")
+        let utterance = AVSpeechUtterance(string: "You have selected the following items: \(selected_items.joined(separator: ", "))")
         utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
         synthesizer.speak(utterance)
     }
