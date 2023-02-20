@@ -1,10 +1,12 @@
 import UIKit
+import AVFoundation
 
 class OptionsViewController: UIViewController {
 
     var buttons: [UIButton] = []
     var items = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p"]
     var buttonColors: [UIColor] = []
+    var selectedItems = ["test", "test"]
     
     let titleLabel: UILabel = {
         let label = UILabel()
@@ -19,6 +21,8 @@ class OptionsViewController: UIViewController {
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         return scrollView
     }()
+    
+    let synthesizer = AVSpeechSynthesizer()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -103,13 +107,9 @@ class OptionsViewController: UIViewController {
         confirmButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
         confirmButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
         confirmButton.translatesAutoresizingMaskIntoConstraints = false
+        confirmButton.addTarget(self, action: #selector(confirmButtonTapped), for: .touchUpInside)
+        confirmButton.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(confirmButton)
-
-        let buttonCount = CGFloat(buttons.count)
-        let confirmButtonTopAnchor = buttonCount > 0 ? buttons[0].bottomAnchor : titleLabel.bottomAnchor
-
-
-
 
         NSLayoutConstraint.activate([
             confirmButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
@@ -158,6 +158,12 @@ class OptionsViewController: UIViewController {
 //        let VC = ViewController()
 //        present(VC, animated: true, completion: nil)
         
+    }
+    
+    @objc func confirmButtonTapped() {
+        let utterance = AVSpeechUtterance(string: "You have selected the following items: \(selectedItems.joined(separator: ", "))")
+        utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+        synthesizer.speak(utterance)
     }
         
 }
