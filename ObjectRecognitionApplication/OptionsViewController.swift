@@ -21,7 +21,7 @@ class OptionsViewController: UIViewController {
         let backButton = UIButton()
         backButton.setTitle("Back", for: .normal)
         backButton.setTitleColor(.white, for: .normal)
-        backButton.backgroundColor = .black
+        backButton.backgroundColor = .darkGray
         backButton.layer.cornerRadius = 10
         backButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
         backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
@@ -74,6 +74,25 @@ class OptionsViewController: UIViewController {
             view.addSubview(button2)
         }
         
+        let confirmButton = UIButton(type: .system)
+        confirmButton.backgroundColor = .systemBlue
+        confirmButton.layer.borderWidth = 1.0
+        confirmButton.layer.borderColor = UIColor.black.cgColor
+        confirmButton.layer.cornerRadius = 10
+        confirmButton.setTitle("Confirm", for: .normal)
+        confirmButton.setTitleColor(.white, for: .normal)
+        confirmButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
+        confirmButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        confirmButton.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(confirmButton)
+        
+        NSLayoutConstraint.activate([
+            confirmButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
+            confirmButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
+            confirmButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
+            confirmButton.topAnchor.constraint(equalTo: buttons.last?.last?.bottomAnchor ?? titleLabel.bottomAnchor, constant: 20),
+            confirmButton.heightAnchor.constraint(equalToConstant: 60)
+        ])
     }
         
     
