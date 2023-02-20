@@ -2,6 +2,9 @@ import UIKit
 
 class OptionsViewController: UIViewController {
 
+    var buttons: [UIButton] = []
+    var items = ["x", "x", "x", "x", "x", "x"]
+    
     let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Select items to locate"
@@ -42,8 +45,43 @@ class OptionsViewController: UIViewController {
             titleLabel.widthAnchor.constraint(equalToConstant: view.bounds.width - 40),
             titleLabel.heightAnchor.constraint(equalToConstant: 50),
         ])
+        
+        let buttonTitles = items
+        
+        for i in 0..<buttonTitles.count {
+            let button = UIButton()
+            button.setTitle(buttonTitles[i], for: .normal)
+            button.backgroundColor = .white
+            button.setTitleColor(.black, for: .normal)
+            button.layer.cornerRadius = 10
+            button.layer.borderColor = UIColor.black.cgColor
+            button.layer.borderWidth = 1
+            button.layer.masksToBounds = true
+            button.tag = i
+            button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+            buttons.append(button)
+            view.addSubview(button)
+        }
+        
     }
         
+    
+    override func viewWillLayoutSubviews() {
+            super.viewWillLayoutSubviews()
+            
+            let buttonWidth = view.bounds.width - 20
+            let buttonHeight: CGFloat = 60
+            let topMargin = titleLabel.frame.origin.y + titleLabel.frame.size.height + 10.0
+            
+            for i in 0..<buttons.count {
+                let button = buttons[i]
+                button.frame = CGRect(x: 10, y: topMargin + CGFloat(i) * (buttonHeight + 10), width: buttonWidth, height: buttonHeight)
+            }
+        }
+    
+    @IBAction func buttonTapped(_ button: UIButton) {
+        print("tapped")
+    }
     
     @objc func backButtonTapped() {
         self.dismiss(animated: true, completion: nil)
