@@ -55,8 +55,6 @@ class OptionsViewController: UIViewController {
     }()
 
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
@@ -67,29 +65,31 @@ class OptionsViewController: UIViewController {
         NSLayoutConstraint.activate([
             backButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
             backButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 20),
-            backButton.widthAnchor.constraint(equalToConstant: 150),
+            backButton.widthAnchor.constraint(equalToConstant: (self.view.bounds.width / 2) * 0.85),
             backButton.heightAnchor.constraint(equalToConstant: 80),
         ])
-        
 
+        
         let fontSizeButton = UIButton()
         fontSizeButton.setTitle("Aa", for: .normal)
-        fontSizeButton.backgroundColor = .systemBlue
+        fontSizeButton.backgroundColor = .white
         fontSizeButton.layer.borderWidth = 1.0
         fontSizeButton.layer.borderColor = UIColor.black.cgColor
         fontSizeButton.layer.cornerRadius = 10
-        fontSizeButton.setTitleColor(.white, for: .normal)
-        fontSizeButton.titleLabel?.font = UIFont.systemFont(ofSize: fontSizes[currentFontSizeIndex])
+        fontSizeButton.setTitleColor(.black, for: .normal)
+        fontSizeButton.titleLabel?.font = UIFont.systemFont(ofSize: 30)
         fontSizeButton.addTarget(self, action: #selector(fontSizeButtonTapped), for: .touchUpInside)
 
         fontSizeButton.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(fontSizeButton)
         NSLayoutConstraint.activate([
-            fontSizeButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
-            fontSizeButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 20),
+            fontSizeButton.leadingAnchor.constraint(equalTo: backButton.trailingAnchor, constant: (self.view.bounds.width / 8) * 0.85),
+            fontSizeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: (self.view.bounds.width / 8) * -0.85),
+            fontSizeButton.centerYAnchor.constraint(equalTo: backButton.centerYAnchor),
             fontSizeButton.widthAnchor.constraint(equalToConstant: 100),
             fontSizeButton.heightAnchor.constraint(equalToConstant: 60),
         ])
+
 
         navigationItem.titleView = titleLabel
         navigationItem.titleView?.contentMode = .center
@@ -138,9 +138,15 @@ class OptionsViewController: UIViewController {
             // set button color from array
             if i < buttonColors.count {
                 button.backgroundColor = buttonColors[i]
+                if buttonColors[i] == .systemBlue {
+                    button.setTitleColor(.white, for: .normal)
+                } else {
+                    button.setTitleColor(.black, for: .normal)
+                }
             } else {
                 buttonColors.append(button.backgroundColor ?? .white)
             }
+
         }
         
         confirmButton.translatesAutoresizingMaskIntoConstraints = false
