@@ -8,6 +8,11 @@ class VisionObjectRecognitionViewController: ViewController {
     // Vision parts
     internal var requests = [VNRequest]()
     
+    var settingsVC: OptionsViewController!
+
+    var all_items = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p"]
+    static var selected_items:[String] = ["all"]
+    
     @discardableResult
     func setupVision() -> NSError? {
         // Setup Vision parts
@@ -34,6 +39,7 @@ class VisionObjectRecognitionViewController: ViewController {
         return error
     }
     
+    
     func drawVisionRequestResults(_ results: [Any]) {
         CATransaction.begin()
         CATransaction.setValue(kCFBooleanTrue, forKey: kCATransactionDisableActions)
@@ -53,13 +59,28 @@ class VisionObjectRecognitionViewController: ViewController {
             let textLayer = self.createTextSubLayerInBounds(objectBounds,
                                                             identifier: topLabelObservation.identifier,
                                                             confidence: topLabelObservation.confidence)
+            
             shapeLayer.addSublayer(textLayer)
             detectionOverlay.addSublayer(shapeLayer)
             
+            if findObjectButton.currentTitle == "Finding selected items" {
+                for object in VisionObjectRecognitionViewController.selected_items {
+                    if topLabelObservation.identifier == object {
+                        AudioServicesPlayAlertSoundWithCompletion(SystemSoundID(kSystemSoundID_Vibrate)) { }
+                    }
+                }
+            } else {
+                for object in all_items {
+                    if topLabelObservation.identifier == object {
+                        AudioServicesPlayAlertSoundWithCompletion(SystemSoundID(kSystemSoundID_Vibrate)) { }
+                    }
+                }
+            }
         }
         self.updateLayerGeometry()
         CATransaction.commit()
     }
+    
     
     override func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
@@ -73,6 +94,7 @@ class VisionObjectRecognitionViewController: ViewController {
             print(error)
         }
     }
+    
     
     override func setupAVCapture() {
         super.setupAVCapture()
@@ -94,6 +116,7 @@ class VisionObjectRecognitionViewController: ViewController {
         rootLayer.addSublayer(detectionOverlay)
      }
      
+    
      func updateLayerGeometry() {
          let bounds = rootLayer.bounds
          var scale: CGFloat
@@ -120,24 +143,54 @@ class VisionObjectRecognitionViewController: ViewController {
     func createTextSubLayerInBounds(_ bounds: CGRect, identifier: String, confidence: VNConfidence) -> CATextLayer {
         let textLayer = CATextLayer()
         textLayer.name = "Object Label"
+        let confidenceValue = Float(confidence)
+        let formattedString = NSMutableAttributedString(string: String(format: "\(identifier) (%.0f%%)", confidenceValue * 100))
+        let largeFont = UIFont(name: "Helvetica", size: 24.0)!
+        formattedString.addAttributes([NSAttributedString.Key.font: largeFont], range: NSRange(location: 0, length: identifier.count))
+        textLayer.string = formattedString
+        
+        textLayer.bounds = CGRect(x: 0, y: 0, width: bounds.size.height, height: bounds.size.width)
+        textLayer.position = CGPoint(x: bounds.midX, y: bounds.midY)
+        textLayer.shadowOpacity = 0.5
+        textLayer.shadowOffset = CGSize(width: 2, height: 2)
+        textLayer.foregroundColor = CGColor(colorSpace: CGColorSpaceCreateDeviceRGB(), components: [1.0, 1.0, 1.0, 1.0])
+        textLayer.contentsScale = 2.0 // retina rendering
+        
+        // rotate the layer into screen orientation and scale and mirror
+        textLayer.setAffineTransform(CGAffineTransform(rotationAngle: CGFloat(.pi / 2.0)).scaledBy(x: 1.0, y: -1.0))
         return textLayer
     }
-    
+
+
     func createRoundedRectLayerWithBounds(_ bounds: CGRect) -> CALayer {
         let shapeLayer = CALayer()
+        shapeLayer.bounds = bounds
+        shapeLayer.position = CGPoint(x: bounds.midX, y: bounds.midY)
         shapeLayer.name = "Found Object"
+        shapeLayer.backgroundColor = CGColor(colorSpace: CGColorSpaceCreateDeviceRGB(), components: [1.0, 1.0, 1.0, 0.2])
+        shapeLayer.cornerRadius = 7
         return shapeLayer
     }
 
     
-    
     @IBAction func button2(_ sender: Any) {
-        print("pressed")
+        
+        if findObjectButton.currentTitle == "Finding selected items" {
+            findObjectButton.setTitle("Finding all items", for: .normal)
+        } else {
+            findObjectButton.setTitle("Finding selected items", for: .normal)
+        }
+        print(VisionObjectRecognitionViewController.selected_items)
+
+    }
+    
+    func updateValue(_ value: [String]) {
+        print(value)
+        VisionObjectRecognitionViewController.selected_items = value
     }
 
  
 }
     
-
 
 

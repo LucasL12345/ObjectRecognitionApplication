@@ -9,6 +9,7 @@ class OptionsViewController: UIViewController {
     var items = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p"]
     var buttonColors: [UIColor] = []
     var selected_items = [""]
+    var visionObjectVC: VisionObjectRecognitionViewController!
     
     let titleLabel: UILabel = {
         let label = UILabel()
@@ -199,6 +200,7 @@ class OptionsViewController: UIViewController {
         // Update font size for the back and confirm buttons
         backButton.titleLabel?.font = UIFont.systemFont(ofSize: fontSizes[currentFontSizeIndex])
         confirmButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: fontSizes[currentFontSizeIndex]+5)
+        
     }
 
     
@@ -222,6 +224,13 @@ class OptionsViewController: UIViewController {
         // save button colors to user defaults
         let savedButtonColors = buttonColors.map { try? NSKeyedArchiver.archivedData(withRootObject: $0, requiringSecureCoding: false) }
         UserDefaults.standard.set(savedButtonColors, forKey: "buttonColors")
+        
+        guard let presentingVC = presentingViewController as? VisionObjectRecognitionViewController else {
+            fatalError("Unable to get presenting view controller")
+        }
+        visionObjectVC = presentingVC
+        visionObjectVC.updateValue(selected_items)
+
     }
 
 
