@@ -10,6 +10,8 @@
 		A0CDBC5F29A1A01D009CE398 /* ObjectRecognitionApplicationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CDBC5E29A1A01D009CE398 /* ObjectRecognitionApplicationTests.swift */; };
 		A0CDBC9C29A2F162009CE398 /* InformationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CDBC9B29A2F162009CE398 /* InformationViewController.swift */; };
 		A0CDBC9E29A2F19A009CE398 /* OptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CDBC9D29A2F19A009CE398 /* OptionsViewController.swift */; };
+		A0CDBD2F29A6E83A009CE398 /* IntentHandler.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = A0CDBD2E29A6E83A009CE398 /* IntentHandler.intentdefinition */; };
+		A0CDBD3129A6E971009CE398 /* IntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CDBD3029A6E971009CE398 /* IntentHandler.swift */; };
 		FAB417F62099308400494E9C /* VisionObjectRecognitionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB417F52099308400494E9C /* VisionObjectRecognitionViewController.swift */; };
 		FAD5009F1ED668B60074D713 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD5009E1ED668B60074D713 /* AppDelegate.swift */; };
 		FAD500A11ED668B60074D713 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD500A01ED668B60074D713 /* ViewController.swift */; };
@@ -33,6 +35,8 @@
 		A0CDBC5E29A1A01D009CE398 /* ObjectRecognitionApplicationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectRecognitionApplicationTests.swift; sourceTree = "<group>"; };
 		A0CDBC9B29A2F162009CE398 /* InformationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformationViewController.swift; sourceTree = "<group>"; };
 		A0CDBC9D29A2F19A009CE398 /* OptionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsViewController.swift; sourceTree = "<group>"; };
+		A0CDBD2E29A6E83A009CE398 /* IntentHandler.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = IntentHandler.intentdefinition; sourceTree = "<group>"; };
+		A0CDBD3029A6E971009CE398 /* IntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentHandler.swift; sourceTree = "<group>"; };
 		FAB417F52099308400494E9C /* VisionObjectRecognitionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VisionObjectRecognitionViewController.swift; sourceTree = "<group>"; };
 		FAD5009E1ED668B60074D713 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FAD500A01ED668B60074D713 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -85,6 +89,8 @@
 				FAB417F52099308400494E9C /* VisionObjectRecognitionViewController.swift */,
 				A0CDBC9B29A2F162009CE398 /* InformationViewController.swift */,
 				A0CDBC9D29A2F19A009CE398 /* OptionsViewController.swift */,
+				A0CDBD3029A6E971009CE398 /* IntentHandler.swift */,
+				A0CDBD2E29A6E83A009CE398 /* IntentHandler.intentdefinition */,
 				FAD500A21ED668B60074D713 /* Main.storyboard */,
 				FAD500A51ED668B60074D713 /* Assets.xcassets */,
 				FAD500AA1ED668B60074D713 /* Info.plist */,
@@ -208,7 +214,9 @@
 				FAD500A11ED668B60074D713 /* ViewController.swift in Sources */,
 				FAD5009F1ED668B60074D713 /* AppDelegate.swift in Sources */,
 				A0CDBC9C29A2F162009CE398 /* InformationViewController.swift in Sources */,
+				A0CDBD3129A6E971009CE398 /* IntentHandler.swift in Sources */,
 				A0CDBC9E29A2F19A009CE398 /* OptionsViewController.swift in Sources */,
+				A0CDBD2F29A6E83A009CE398 /* IntentHandler.intentdefinition in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -140,13 +140,11 @@ class OptionsViewController: UIViewController {
 
     }
 
-
-
     
     @IBAction func buttonTapped(_ button: UIButton) {
+//        implementSiri()
         button.backgroundColor = button.backgroundColor == .white ? .systemBlue : .white
         buttonColors[button.tag] = button.backgroundColor ?? .white
-        
         // save button colors to user defaults
         let savedButtonColors = buttonColors.map { try? NSKeyedArchiver.archivedData(withRootObject: $0, requiringSecureCoding: false) }
         UserDefaults.standard.set(savedButtonColors, forKey: "buttonColors")
@@ -154,16 +152,27 @@ class OptionsViewController: UIViewController {
 
     
     @objc func backButtonTapped() {
+//        implementSiri()
         self.dismiss(animated: true, completion: nil)
-//        let VC = ViewController()
-//        present(VC, animated: true, completion: nil)
         
     }
     
     @objc func confirmButtonTapped() {
+//        implementSiri()
         let utterance = AVSpeechUtterance(string: "You have selected the following items: \(selected_items.joined(separator: ", "))")
         utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
         synthesizer.speak(utterance)
+    }
+    
+    
+    //function to implement siri.
+    //requires Apple Developer subscription unfortunately
+    func implementSiri() {
+//        INInteraction(intent: SelectButtonIntent(buttonName: button.title(for: .normal) ?? ""), response: nil).donate { error in
+//            if let error = error {
+//                print("Failed to donate intent: \(error)")
+//            }
+//        }
     }
         
 }
