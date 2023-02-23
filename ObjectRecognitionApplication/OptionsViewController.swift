@@ -165,5 +165,4 @@ class OptionsViewController: UIViewController {
         utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
         synthesizer.speak(utterance)
     }
-        
 }
