@@ -64,6 +64,8 @@ class OptionsViewController: UIViewController, AVSpeechSynthesizerDelegate  {
             selected_items = selectedItems
         }
         
+        
+        
         backButton.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(backButton)
         
@@ -74,7 +76,15 @@ class OptionsViewController: UIViewController, AVSpeechSynthesizerDelegate  {
             backButton.heightAnchor.constraint(equalToConstant: 80),
         ])
 
-        
+        // Retrieve font size index from user defaults
+        if let index = UserDefaults.standard.object(forKey: "currentFontSizeIndex") as? Int {
+            currentFontSizeIndex = index
+        }
+
+        backButton.titleLabel?.font = UIFont.systemFont(ofSize: fontSizes[currentFontSizeIndex])
+        confirmButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: fontSizes[currentFontSizeIndex]+5)
+    
+    
         let fontSizeButton = UIButton()
         fontSizeButton.setTitle("Aa", for: .normal)
         fontSizeButton.backgroundColor = .white
@@ -146,7 +156,11 @@ class OptionsViewController: UIViewController, AVSpeechSynthesizerDelegate  {
         }
 
 
-
+        // Use the font size index to set the initial font sizes
+        titleLabel.font = UIFont.boldSystemFont(ofSize: fontSizes[currentFontSizeIndex] + 5)
+        for button in buttons {
+            button.titleLabel?.font = UIFont.systemFont(ofSize: fontSizes[currentFontSizeIndex])
+        }
         
         
         confirmButton.translatesAutoresizingMaskIntoConstraints = false
@@ -190,18 +204,21 @@ class OptionsViewController: UIViewController, AVSpeechSynthesizerDelegate  {
     
     @objc func fontSizeButtonTapped() {
         currentFontSizeIndex = (currentFontSizeIndex + 1) % fontSizes.count
-        
+
         titleLabel.font = UIFont.boldSystemFont(ofSize: fontSizes[currentFontSizeIndex] + 5)
-        
+
         for button in buttons {
             button.titleLabel?.font = UIFont.systemFont(ofSize: fontSizes[currentFontSizeIndex])
         }
-        
+
         // Update font size for the back and confirm buttons
         backButton.titleLabel?.font = UIFont.systemFont(ofSize: fontSizes[currentFontSizeIndex])
         confirmButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: fontSizes[currentFontSizeIndex]+5)
-        
+
+        // Save font size index in user defaults
+        UserDefaults.standard.set(currentFontSizeIndex, forKey: "currentFontSizeIndex")
     }
+
 
     
     @IBAction func buttonTapped(_ button: UIButton) {
