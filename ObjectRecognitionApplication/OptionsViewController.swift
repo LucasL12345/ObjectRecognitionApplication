@@ -8,7 +8,7 @@ class OptionsViewController: UIViewController {
     var buttons: [UIButton] = []
     var items = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p"]
     var buttonColors: [UIColor] = []
-    var selected_items = ["test"]
+    var selected_items = [""]
     
     let titleLabel: UILabel = {
         let label = UILabel()
@@ -197,9 +197,22 @@ class OptionsViewController: UIViewController {
 
     
     @IBAction func buttonTapped(_ button: UIButton) {
-        button.backgroundColor = button.backgroundColor == .white ? .systemBlue : .white
+        let title = items[button.tag]
+        if button.backgroundColor == .white {
+            button.backgroundColor = .systemBlue
+            button.setTitleColor(.white, for: .normal)
+            if !selected_items.contains(title) {
+                selected_items.append(title)
+            }
+        } else {
+            button.backgroundColor = .white
+            button.setTitleColor(.black, for: .normal)
+            if let index = selected_items.firstIndex(of: title) {
+                selected_items.remove(at: index)
+            }
+        }
+
         buttonColors[button.tag] = button.backgroundColor ?? .white
-        
         // save button colors to user defaults
         let savedButtonColors = buttonColors.map { try? NSKeyedArchiver.archivedData(withRootObject: $0, requiringSecureCoding: false) }
         UserDefaults.standard.set(savedButtonColors, forKey: "buttonColors")
