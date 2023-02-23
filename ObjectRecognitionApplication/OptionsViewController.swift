@@ -60,6 +60,10 @@ class OptionsViewController: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = .white
         
+        if let selectedItems = UserDefaults.standard.array(forKey: "selectedItems") as? [String] {
+            selected_items = selectedItems
+        }
+        
         backButton.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(backButton)
         
@@ -224,6 +228,8 @@ class OptionsViewController: UIViewController {
         // save button colors to user defaults
         let savedButtonColors = buttonColors.map { try? NSKeyedArchiver.archivedData(withRootObject: $0, requiringSecureCoding: false) }
         UserDefaults.standard.set(savedButtonColors, forKey: "buttonColors")
+        
+        UserDefaults.standard.set(selected_items, forKey: "selectedItems")
         
         guard let presentingVC = presentingViewController as? VisionObjectRecognitionViewController else {
             fatalError("Unable to get presenting view controller")
