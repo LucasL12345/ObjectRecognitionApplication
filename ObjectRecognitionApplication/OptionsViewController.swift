@@ -1,7 +1,7 @@
 import UIKit
 import AVFoundation
 
-class OptionsViewController: UIViewController {
+class OptionsViewController: UIViewController, AVSpeechSynthesizerDelegate  {
 
     let fontSizes = [UIFont.systemFontSize+7, UIFont.systemFontSize + 10, UIFont.systemFontSize + 15]
     var currentFontSizeIndex = 0
@@ -242,10 +242,17 @@ class OptionsViewController: UIViewController {
 
     
     @objc func confirmButtonTapped() {
-        self.dismiss(animated: true, completion: nil)
         let utterance = AVSpeechUtterance(string: "You have selected: \(selected_items.joined(separator: ", "))")
         utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+        
+        synthesizer.delegate = self
         synthesizer.speak(utterance)
     }
+
+    func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
+        self.dismiss(animated: true, completion: nil)
+    }
+
+
         
 }
