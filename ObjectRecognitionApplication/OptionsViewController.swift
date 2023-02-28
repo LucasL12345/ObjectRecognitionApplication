@@ -6,7 +6,8 @@ class OptionsViewController: UIViewController, AVSpeechSynthesizerDelegate  {
     let fontSizes = [UIFont.systemFontSize+7, UIFont.systemFontSize + 10, UIFont.systemFontSize + 15]
     var currentFontSizeIndex = 0
     var buttons: [UIButton] = []
-    var items = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p"]
+    var all_items = ["backpack", "handbag", "bottle", "cup", "knife", "bowl", "laptop", "remote", "cell phone", "book", "vase", "scissors", "toothbrush", "chair", "dog", "cat"]
+
     var buttonColors: [UIColor] = []
     var selected_items = [""]
     var isConfirmationDone = false
