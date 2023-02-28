@@ -10,7 +10,7 @@ class VisionObjectRecognitionViewController: ViewController {
     
     var settingsVC: OptionsViewController!
 
-    var all_items = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p"]
+    var all_items = ["backpack", "handbag", "bottle", "cup", "knife", "bowl", "laptop", "remote", "cell phone", "book", "vase", "scissors", "toothbrush", "chair", "dog", "cat"]
     static var selected_items:[String] = ["all"]
     
     @discardableResult
