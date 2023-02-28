@@ -9,6 +9,7 @@ class OptionsViewController: UIViewController, AVSpeechSynthesizerDelegate  {
     var items = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p"]
     var buttonColors: [UIColor] = []
     var selected_items = [""]
+    var isConfirmationDone = false
     var visionObjectVC: VisionObjectRecognitionViewController!
     
     let titleLabel: UILabel = {
@@ -255,12 +256,19 @@ class OptionsViewController: UIViewController, AVSpeechSynthesizerDelegate  {
 
     
     @objc func confirmButtonTapped() {
+        if isConfirmationDone {
+            return
+        }
+        
         let utterance = AVSpeechUtterance(string: "You have selected: \(selected_items.joined(separator: ", "))")
         utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
-        
+            
         synthesizer.delegate = self
         synthesizer.speak(utterance)
+        
+        isConfirmationDone = true
     }
+
 
     func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
         self.dismiss(animated: true, completion: nil)
