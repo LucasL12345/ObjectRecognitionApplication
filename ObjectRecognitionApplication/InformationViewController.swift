@@ -116,12 +116,13 @@ class InformationViewController: UIViewController {
         cell.layer.cornerRadius = 10
         cell.clipsToBounds = true
         
-        
         let switchView = UISwitch()
         if title == "Vibration1" {
             switchView.tag = 0
+            cell.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(vibration1RowTapped(_:))))
         } else if title == "Vibration2" {
             switchView.tag = 1
+            cell.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(vibration2RowTapped(_:))))
         }
         
         switchView.addTarget(self, action: #selector(switchToggled(_:)), for: .valueChanged)
@@ -134,6 +135,23 @@ class InformationViewController: UIViewController {
         
         return cell
     }
+
+    @objc private func vibration1RowTapped(_ sender: UITapGestureRecognizer) {
+        if let cell = sender.view as? UITableViewCell,
+           let switchView = cell.contentView.subviews.first(where: { $0 is UISwitch }) as? UISwitch {
+            switchView.setOn(!switchView.isOn, animated: true)
+            all_obj_vibration_mode = switchView.isOn
+        }
+    }
+
+    @objc private func vibration2RowTapped(_ sender: UITapGestureRecognizer) {
+        if let cell = sender.view as? UITableViewCell,
+           let switchView = cell.contentView.subviews.first(where: { $0 is UISwitch }) as? UISwitch {
+            switchView.setOn(!switchView.isOn, animated: true)
+            selected_obj_vibration_mode = switchView.isOn
+        }
+    }
+
 
     @objc private func switchToggled(_ sender: UISwitch) {
         if sender.tag == 0 {
