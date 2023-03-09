@@ -12,7 +12,7 @@ class InformationViewController: UIViewController {
         super.viewDidLoad()
         
         // Set the background color of the view to light gray
-        view.backgroundColor = UIColor.lightGray
+        view.backgroundColor = UIColor.white
     
         backButton.setTitle("Back", for: .normal)
             backButton.setTitleColor(.white, for: .normal)
@@ -55,6 +55,7 @@ class InformationViewController: UIViewController {
         addInformationRow()
         addVibration1Row()
         addVibration2Row()
+        
     }
     
     private func addInformationRow() {
@@ -67,6 +68,8 @@ class InformationViewController: UIViewController {
         informationRow.layer.cornerRadius = 10
         informationRow.clipsToBounds = true
         informationRow.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(informationPressed)))
+        informationRow.layer.borderWidth = 1.0
+        informationRow.layer.borderColor = UIColor.gray.cgColor
         view.addSubview(informationRow)
         
         informationRow.translatesAutoresizingMaskIntoConstraints = false
@@ -74,12 +77,13 @@ class InformationViewController: UIViewController {
             informationRow.topAnchor.constraint(equalTo: backButton.bottomAnchor, constant: 20),
             informationRow.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             informationRow.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            informationRow.heightAnchor.constraint(equalToConstant: 44)
+            informationRow.heightAnchor.constraint(equalToConstant: 50) // Change the height here
         ])
     }
 
     private func addVibration1Row() {
         let vibration1Row = createRow(title: "Vibration1")
+        vibration1Row.heightAnchor.constraint(equalToConstant: 50).isActive = true // Change the height here
         view.addSubview(vibration1Row)
         
         vibration1Row.translatesAutoresizingMaskIntoConstraints = false
@@ -87,12 +91,12 @@ class InformationViewController: UIViewController {
             vibration1Row.topAnchor.constraint(equalTo: view.subviews[view.subviews.count - 2].bottomAnchor, constant: 5),
             vibration1Row.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             vibration1Row.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            vibration1Row.heightAnchor.constraint(equalToConstant: 44)
         ])
     }
 
     private func addVibration2Row() {
         let vibration2Row = createRow(title: "Vibration2")
+        vibration2Row.heightAnchor.constraint(equalToConstant: 50).isActive = true // Change the height here
         view.addSubview(vibration2Row)
         
         vibration2Row.translatesAutoresizingMaskIntoConstraints = false
@@ -100,7 +104,6 @@ class InformationViewController: UIViewController {
             vibration2Row.topAnchor.constraint(equalTo: view.subviews[view.subviews.count - 2].bottomAnchor, constant: 5),
             vibration2Row.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             vibration2Row.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            vibration2Row.heightAnchor.constraint(equalToConstant: 44)
         ])
     }
 
@@ -115,6 +118,9 @@ class InformationViewController: UIViewController {
         cell.selectionStyle = .none
         cell.layer.cornerRadius = 10
         cell.clipsToBounds = true
+        cell.layer.borderWidth = 1.0
+        cell.layer.borderColor = UIColor.gray.cgColor
+        cell.heightAnchor.constraint(equalToConstant: 100).isActive = true // set row height to 60
         
         let switchView = UISwitch()
         if title == "Vibration1" {
