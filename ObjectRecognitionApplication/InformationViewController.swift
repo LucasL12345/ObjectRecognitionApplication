@@ -1,86 +1,35 @@
 import UIKit
 
 class InformationViewController: UIViewController {
-
-    let fontSizes = [UIFont.systemFontSize + 10, UIFont.systemFontSize + 15, UIFont.systemFontSize + 20]
-    var currentFontSizeIndex = 0 {
-        didSet {
-            // Update font size for the title label, paragraph label, and back button
-            titleLabel.font = UIFont.boldSystemFont(ofSize: fontSizes[currentFontSizeIndex] + 5)
-            paragraphLabel.font = UIFont.systemFont(ofSize: fontSizes[currentFontSizeIndex])
-            backButton.titleLabel?.font = UIFont.systemFont(ofSize: fontSizes[currentFontSizeIndex] + 5)
-
-            // Save font size index in user defaults
-            UserDefaults.standard.set(currentFontSizeIndex, forKey: "currentFontSizeIndex")
-        }
-    }
-    
-    let scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        return scrollView
-    }()
-    
-    
     
     let backButton = UIButton()
+    let fontSizes = [UIFont.systemFontSize+7, UIFont.systemFontSize + 10, UIFont.systemFontSize + 15]
+    var currentFontSizeIndex = 0
+    var all_obj_vibration_mode = true
+    var selected_obj_vibration_mode = true
     
-    let titleLabel = UILabel()
-    
-    let paragraphLabel = UILabel()
-
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .white
-
-        if let index = UserDefaults.standard.object(forKey: "currentFontSizeIndex") as? Int {
-            currentFontSizeIndex = index
-        }
-
+        
+        // Set the background color of the view to light gray
+        view.backgroundColor = UIColor.lightGray
+    
         backButton.setTitle("Back", for: .normal)
             backButton.setTitleColor(.white, for: .normal)
             backButton.backgroundColor = .black
             backButton.layer.cornerRadius = 10
-            backButton.titleLabel?.font = UIFont.systemFont(ofSize: fontSizes[currentFontSizeIndex])
+            backButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
             backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
             backButton.translatesAutoresizingMaskIntoConstraints = false
-            scrollView.addSubview(backButton)
-
-            titleLabel.text = "App Information"
-            titleLabel.font = UIFont.boldSystemFont(ofSize: fontSizes[currentFontSizeIndex])
-            titleLabel.translatesAutoresizingMaskIntoConstraints = false
-            scrollView.addSubview(titleLabel)
-
-            paragraphLabel.text = "This app is designed to help visually impaired people locate objects that they may have lost as well as help them to identify dangerous objects around them using the devices camera. There are three main buttons. Firstly, a large button at the bottom with two modes - find all objects and find selected objects. Find all objects mode will read out any objects the app can detect through the devices camera, and find selected objects will only notify the user of objects selected in the Choose Items page. To get to this page you can press the button at the top right of the screen. In this page, there is a list of objects that you can select, with a Confirm button at the bottom or a back button at the top left to go back to the main page. Finally, on the main page there is an Information page (this page) describing the app's layout. There is also a text resize button at the top right of both the information page and the Choose items page as well as back buttons at the top left of both these pages."
-            paragraphLabel.textAlignment = .center
-            paragraphLabel.numberOfLines = 0
-            paragraphLabel.font = UIFont.systemFont(ofSize: fontSizes[currentFontSizeIndex])
-            paragraphLabel.translatesAutoresizingMaskIntoConstraints = false
-            scrollView.addSubview(paragraphLabel)
-
-
-        self.view.addSubview(scrollView)
+        view.addSubview(backButton)
 
         NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: self.view.topAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-            
-            backButton.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20),
-            backButton.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 20),
+            backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            backButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
             backButton.widthAnchor.constraint(equalToConstant: 150),
             backButton.heightAnchor.constraint(equalToConstant: 80),
-
-            titleLabel.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-            titleLabel.topAnchor.constraint(equalTo: backButton.bottomAnchor, constant: 20),
-
-            paragraphLabel.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-            paragraphLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 15),
-            paragraphLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20),
-            paragraphLabel.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20),
-            paragraphLabel.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -20),
         ])
+        
         
         let fontSizeButton = UIButton()
         fontSizeButton.setTitle("Aa", for: .normal)
@@ -101,21 +50,123 @@ class InformationViewController: UIViewController {
             fontSizeButton.widthAnchor.constraint(equalToConstant: 100),
             fontSizeButton.heightAnchor.constraint(equalToConstant: 60),
         ])
-
-
-        scrollView.contentSize = CGSize(width: self.view.frame.size.width, height: paragraphLabel.frame.origin.y + paragraphLabel.frame.size.height + 20)
+        
+        // Add the three rows as subviews to the main view
+        addInformationRow()
+        addVibration1Row()
+        addVibration2Row()
+    }
+    
+    private func addInformationRow() {
+        let informationRow = UITableViewCell(style: .default, reuseIdentifier: nil)
+        informationRow.backgroundColor = UIColor.white
+        informationRow.textLabel?.text = "Information"
+        informationRow.textLabel?.font = UIFont.systemFont(ofSize: 17)
+        informationRow.selectionStyle = .none
+        informationRow.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
+        informationRow.layer.cornerRadius = 10
+        informationRow.clipsToBounds = true
+        informationRow.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(informationPressed)))
+        view.addSubview(informationRow)
+        
+        informationRow.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            informationRow.topAnchor.constraint(equalTo: backButton.bottomAnchor, constant: 20),
+            informationRow.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            informationRow.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            informationRow.heightAnchor.constraint(equalToConstant: 44)
+        ])
     }
 
+    private func addVibration1Row() {
+        let vibration1Row = createRow(title: "Vibration1")
+        view.addSubview(vibration1Row)
+        
+        vibration1Row.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            vibration1Row.topAnchor.constraint(equalTo: view.subviews[view.subviews.count - 2].bottomAnchor, constant: 5),
+            vibration1Row.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            vibration1Row.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            vibration1Row.heightAnchor.constraint(equalToConstant: 44)
+        ])
+    }
+
+    private func addVibration2Row() {
+        let vibration2Row = createRow(title: "Vibration2")
+        view.addSubview(vibration2Row)
+        
+        vibration2Row.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            vibration2Row.topAnchor.constraint(equalTo: view.subviews[view.subviews.count - 2].bottomAnchor, constant: 5),
+            vibration2Row.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            vibration2Row.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            vibration2Row.heightAnchor.constraint(equalToConstant: 44)
+        ])
+    }
+
+
+    
+    // Helper method to create a row with a given title
+    private func createRow(title: String) -> UITableViewCell {
+        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+        cell.backgroundColor = UIColor.white
+        cell.textLabel?.text = title
+        cell.textLabel?.font = UIFont.systemFont(ofSize: 17)
+        cell.selectionStyle = .none
+        cell.layer.cornerRadius = 10
+        cell.clipsToBounds = true
+        
+        
+        let switchView = UISwitch()
+        if title == "Vibration1" {
+            switchView.tag = 0
+        } else if title == "Vibration2" {
+            switchView.tag = 1
+        }
+        
+        switchView.addTarget(self, action: #selector(switchToggled(_:)), for: .valueChanged)
+        cell.contentView.addSubview(switchView)
+        switchView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            switchView.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
+            switchView.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -15)
+        ])
+        
+        return cell
+    }
+
+    @objc private func switchToggled(_ sender: UISwitch) {
+        if sender.tag == 0 {
+            all_obj_vibration_mode.toggle()
+            print("Vibration1 switch toggled: \(all_obj_vibration_mode)")
+        } else if sender.tag == 1 {
+            selected_obj_vibration_mode.toggle()
+            print("Vibration2 switch toggled: \(selected_obj_vibration_mode)")
+        }
+    }
+
+    
+    // Action method to handle the "Information" row being pressed
+    @objc private func informationPressed() {
+        print("Information pressed")
+    }
+    
+    // Action method to handle the "Vibration1" switch being toggled
+    @objc private func vibration1SwitchChanged(_ sender: UISwitch) {
+        print("Vibration1 switch changed: \(sender.isOn)")
+    }
+    
+    // Action method to handle the "Vibration2" switch being toggled
+    @objc private func vibration2SwitchChanged(_ sender: UISwitch) {
+        print("Vibration2 switch changed: \(sender.isOn)")
+    }
+    
     @objc func backButtonTapped() {
         self.dismiss(animated: true, completion: nil)
     }
-    
+
     @objc func fontSizeButtonTapped() {
         currentFontSizeIndex = (currentFontSizeIndex + 1) % fontSizes.count
-
-        titleLabel.font = UIFont.boldSystemFont(ofSize: fontSizes[currentFontSizeIndex])
-        
-        paragraphLabel.font = UIFont.systemFont(ofSize: fontSizes[currentFontSizeIndex])
 
         // Update font size for the back and confirm buttons
         backButton.titleLabel?.font = UIFont.systemFont(ofSize: fontSizes[currentFontSizeIndex])

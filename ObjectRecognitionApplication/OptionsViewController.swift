@@ -6,9 +6,11 @@ class OptionsViewController: UIViewController, AVSpeechSynthesizerDelegate  {
     let fontSizes = [UIFont.systemFontSize+7, UIFont.systemFontSize + 10, UIFont.systemFontSize + 15]
     var currentFontSizeIndex = 0
     var buttons: [UIButton] = []
-    var items = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p"]
+    var all_items = ["backpack", "handbag", "bottle", "cup", "knife", "bowl", "laptop", "remote", "cell phone", "book", "vase", "scissors", "toothbrush", "chair", "dog", "cat"]
+
     var buttonColors: [UIColor] = []
-    var selected_items = [""]
+    var selected_items = [String]()
+    var isConfirmationDone = false
     var visionObjectVC: VisionObjectRecognitionViewController!
     
     let titleLabel: UILabel = {
@@ -125,7 +127,7 @@ class OptionsViewController: UIViewController, AVSpeechSynthesizerDelegate  {
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         
-        let buttonTitles = items
+        let buttonTitles = all_items
         
         // load button colors from user defaults
         if let savedButtonColors = UserDefaults.standard.array(forKey: "buttonColors") as? [Data] {
@@ -222,7 +224,7 @@ class OptionsViewController: UIViewController, AVSpeechSynthesizerDelegate  {
 
     
     @IBAction func buttonTapped(_ button: UIButton) {
-        let title = items[button.tag]
+        let title = all_items[button.tag]
         if button.backgroundColor == .white {
             button.backgroundColor = .systemBlue
             button.setTitleColor(.white, for: .normal)
@@ -255,12 +257,19 @@ class OptionsViewController: UIViewController, AVSpeechSynthesizerDelegate  {
 
     
     @objc func confirmButtonTapped() {
+        if isConfirmationDone {
+            return
+        }
+        
         let utterance = AVSpeechUtterance(string: "You have selected: \(selected_items.joined(separator: ", "))")
         utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
-        
+            
         synthesizer.delegate = self
         synthesizer.speak(utterance)
+        
+        isConfirmationDone = true
     }
+
 
     func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
         self.dismiss(animated: true, completion: nil)
