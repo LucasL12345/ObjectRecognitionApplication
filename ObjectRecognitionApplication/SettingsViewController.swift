@@ -60,7 +60,7 @@ class SettingsViewController: UIViewController {
         let informationRow = UITableViewCell(style: .default, reuseIdentifier: nil)
         informationRow.backgroundColor = UIColor.white
         informationRow.textLabel?.text = "Information"
-        informationRow.textLabel?.font = UIFont.systemFont(ofSize: 17)
+        informationRow.textLabel?.font = UIFont.systemFont(ofSize: fontSizes[currentFontSizeIndex])
         informationRow.selectionStyle = .none
         informationRow.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
         informationRow.layer.cornerRadius = 10
@@ -128,7 +128,8 @@ class SettingsViewController: UIViewController {
         let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
         cell.backgroundColor = UIColor.white
         cell.textLabel?.text = title
-        cell.textLabel?.font = UIFont.systemFont(ofSize: 17)
+        cell.textLabel?.font = UIFont.systemFont(ofSize: fontSizes[currentFontSizeIndex])
+        cell.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
         cell.selectionStyle = .none
         cell.layer.cornerRadius = 10
         cell.clipsToBounds = true
@@ -198,15 +199,31 @@ class SettingsViewController: UIViewController {
         self.dismiss(animated: true, completion: nil)
     }
 
-    @objc func fontSizeButtonTapped() {
+    @objc private func fontSizeButtonTapped() {
         currentFontSizeIndex = (currentFontSizeIndex + 1) % fontSizes.count
 
-        // Update font size for the back and confirm buttons
+        // Update font size for the back button
         backButton.titleLabel?.font = UIFont.systemFont(ofSize: fontSizes[currentFontSizeIndex])
+
+        // Update font size for the Information row
+        if let informationRow = view.subviews.first(where: { $0 is UITableViewCell && ($0 as! UITableViewCell).textLabel?.text == "Information" }) as? UITableViewCell {
+            informationRow.textLabel?.font = UIFont.systemFont(ofSize: fontSizes[currentFontSizeIndex])
+        }
+
+        // Update font size for the Vibration1 row
+        if let vibration1Row = view.subviews.first(where: { $0 is UITableViewCell && ($0 as! UITableViewCell).textLabel?.text == "Vibration1" }) as? UITableViewCell {
+            vibration1Row.textLabel?.font = UIFont.systemFont(ofSize: fontSizes[currentFontSizeIndex])
+        }
+
+        // Update font size for the Vibration2 row
+        if let vibration2Row = view.subviews.first(where: { $0 is UITableViewCell && ($0 as! UITableViewCell).textLabel?.text == "Vibration2" }) as? UITableViewCell {
+            vibration2Row.textLabel?.font = UIFont.systemFont(ofSize: fontSizes[currentFontSizeIndex])
+        }
 
         // Save font size index in user defaults
         UserDefaults.standard.set(currentFontSizeIndex, forKey: "currentFontSizeIndex")
     }
+
     
     
     @objc func showInformation() {
