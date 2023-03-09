@@ -54,7 +54,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         return button
     }()
     
-    let informationButton: UIButton = {
+    let settingsButton: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = .white
         button.backgroundColor = button.backgroundColor?.withAlphaComponent(0.75)
@@ -65,7 +65,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
         button.layer.cornerRadius = 10
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(ViewController.showInformation), for: .touchUpInside)
+        button.addTarget(self, action: #selector(ViewController.showSettings), for: .touchUpInside)
         return button
     }()
     
@@ -74,22 +74,22 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         super.viewDidLoad()
         setupAVCapture()
         
-        view.addSubview(informationButton)
-        informationButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(settingsButton)
+        settingsButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(optionButton)
         optionButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(findObjectButton)
         findObjectButton.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
-            informationButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1/3),
-            informationButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
-            informationButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-            informationButton.heightAnchor.constraint(equalToConstant: 90),
+            settingsButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1/3),
+            settingsButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
+            settingsButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+            settingsButton.heightAnchor.constraint(equalToConstant: 90),
 
 //            optionButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 2/3),
             optionButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
-            optionButton.leadingAnchor.constraint(equalTo: informationButton.trailingAnchor, constant: 10),
+            optionButton.leadingAnchor.constraint(equalTo: settingsButton.trailingAnchor, constant: 10),
             optionButton.heightAnchor.constraint(equalToConstant: 90),
             optionButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
 
@@ -107,9 +107,9 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         present(optionsVC, animated: true, completion: nil)
     }
     
-    @objc func showInformation() {
-        let informationVC = InformationViewController()
-        present(informationVC, animated: true, completion: nil)
+    @objc func showSettings() {
+        let settingsVC = SettingsViewController()
+        present(settingsVC, animated: true, completion: nil)
     }
     
     func setupAVCapture() {
