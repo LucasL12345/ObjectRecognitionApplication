@@ -7,12 +7,27 @@ class SettingsViewController: UIViewController {
     var currentFontSizeIndex = 0
     var all_obj_vibration_mode = true
     var selected_obj_vibration_mode = true
+    let switchViewTextGap: CGFloat = 8.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Set the background color of the view to light gray
         view.backgroundColor = UIColor.white
+        
+        all_obj_vibration_mode = UserDefaults.standard.bool(forKey: "all_obj_vibration_mode")
+        selected_obj_vibration_mode = UserDefaults.standard.bool(forKey: "selected_obj_vibration_mode")
+
+        
+        if let vibration1Row = view.subviews.first(where: { $0 is UITableViewCell && ($0 as! UITableViewCell).textLabel?.text == "All objects vibration" }) as? UITableViewCell,
+           let vibration1Switch = vibration1Row.contentView.subviews.first(where: { $0 is UISwitch }) as? UISwitch {
+            vibration1Switch.isOn = all_obj_vibration_mode
+        }
+
+        if let vibration2Row = view.subviews.first(where: { $0 is UITableViewCell && ($0 as! UITableViewCell).textLabel?.text == "Selected objects vibration" }) as? UITableViewCell,
+           let vibration2Switch = vibration2Row.contentView.subviews.first(where: { $0 is UISwitch }) as? UISwitch {
+            vibration2Switch.isOn = selected_obj_vibration_mode
+        }
     
         backButton.setTitle("Back", for: .normal)
             backButton.setTitleColor(.white, for: .normal)
@@ -49,6 +64,7 @@ class SettingsViewController: UIViewController {
             fontSizeButton.widthAnchor.constraint(equalToConstant: 100),
             fontSizeButton.heightAnchor.constraint(equalToConstant: 60),
         ])
+        
         
         // Add the three rows as subviews to the main view
         addInformationRow()
@@ -96,7 +112,7 @@ class SettingsViewController: UIViewController {
 
 
     private func addVibration1Row() {
-        let vibration1Row = createRow(title: "Vibration1")
+        let vibration1Row = createRow(title: "All objects vibration")
         vibration1Row.heightAnchor.constraint(equalToConstant: 50).isActive = true // Change the height here
         view.addSubview(vibration1Row)
         
@@ -109,7 +125,7 @@ class SettingsViewController: UIViewController {
     }
 
     private func addVibration2Row() {
-        let vibration2Row = createRow(title: "Vibration2")
+        let vibration2Row = createRow(title: "Selected objects vibration")
         vibration2Row.heightAnchor.constraint(equalToConstant: 50).isActive = true // Change the height here
         view.addSubview(vibration2Row)
         
@@ -122,7 +138,6 @@ class SettingsViewController: UIViewController {
     }
 
 
-    
     // Helper method to create a row with a given title
     private func createRow(title: String) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
@@ -135,27 +150,28 @@ class SettingsViewController: UIViewController {
         cell.clipsToBounds = true
         cell.layer.borderWidth = 1.0
         cell.layer.borderColor = UIColor.gray.cgColor
-        cell.heightAnchor.constraint(equalToConstant: 100).isActive = true // set row height to 60
         
         let switchView = UISwitch()
-        if title == "Vibration1" {
-            switchView.tag = 0
-            cell.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(vibration1RowTapped(_:))))
-        } else if title == "Vibration2" {
-            switchView.tag = 1
-            cell.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(vibration2RowTapped(_:))))
-        }
-        
         switchView.addTarget(self, action: #selector(switchToggled(_:)), for: .valueChanged)
         cell.contentView.addSubview(switchView)
         switchView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             switchView.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
-            switchView.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -15)
+            switchView.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -15),
+            switchView.widthAnchor.constraint(equalToConstant: 51),
+            switchView.heightAnchor.constraint(equalToConstant: 31),
         ])
+        
+        if let textLabel = cell.textLabel {
+            let textLabelHeight = textLabel.sizeThatFits(CGSize(width: textLabel.frame.size.width, height: CGFloat.greatestFiniteMagnitude)).height
+            let rowHeight = max(textLabelHeight, switchView.frame.size.height) + switchViewTextGap * 2 // add padding to the switchView
+            cell.heightAnchor.constraint(equalToConstant: rowHeight).isActive = true
+            textLabel.numberOfLines = 0 // allow text to wrap to multiple lines
+        }
         
         return cell
     }
+
 
     @objc private func vibration1RowTapped(_ sender: UITapGestureRecognizer) {
         if let cell = sender.view as? UITableViewCell,
@@ -177,22 +193,23 @@ class SettingsViewController: UIViewController {
     @objc private func switchToggled(_ sender: UISwitch) {
         if sender.tag == 0 {
             all_obj_vibration_mode.toggle()
-            print("Vibration1 switch toggled: \(all_obj_vibration_mode)")
+            UserDefaults.standard.set(all_obj_vibration_mode, forKey: "all_obj_vibration_mode")
         } else if sender.tag == 1 {
             selected_obj_vibration_mode.toggle()
-            print("Vibration2 switch toggled: \(selected_obj_vibration_mode)")
+            UserDefaults.standard.set(selected_obj_vibration_mode, forKey: "selected_obj_vibration_mode")
         }
     }
+
     
     
     // Action method to handle the "Vibration1" switch being toggled
     @objc private func vibration1SwitchChanged(_ sender: UISwitch) {
-        print("Vibration1 switch changed: \(sender.isOn)")
+        print("All objects vibration switch changed: \(sender.isOn)")
     }
     
     // Action method to handle the "Vibration2" switch being toggled
     @objc private func vibration2SwitchChanged(_ sender: UISwitch) {
-        print("Vibration2 switch changed: \(sender.isOn)")
+        print("Selected objects vibration switch changed: \(sender.isOn)")
     }
     
     @objc func backButtonTapped() {
@@ -211,12 +228,12 @@ class SettingsViewController: UIViewController {
         }
 
         // Update font size for the Vibration1 row
-        if let vibration1Row = view.subviews.first(where: { $0 is UITableViewCell && ($0 as! UITableViewCell).textLabel?.text == "Vibration1" }) as? UITableViewCell {
+        if let vibration1Row = view.subviews.first(where: { $0 is UITableViewCell && ($0 as! UITableViewCell).textLabel?.text == "All objects vibration" }) as? UITableViewCell {
             vibration1Row.textLabel?.font = UIFont.systemFont(ofSize: fontSizes[currentFontSizeIndex])
         }
 
         // Update font size for the Vibration2 row
-        if let vibration2Row = view.subviews.first(where: { $0 is UITableViewCell && ($0 as! UITableViewCell).textLabel?.text == "Vibration2" }) as? UITableViewCell {
+        if let vibration2Row = view.subviews.first(where: { $0 is UITableViewCell && ($0 as! UITableViewCell).textLabel?.text == "Selected objects vibration" }) as? UITableViewCell {
             vibration2Row.textLabel?.font = UIFont.systemFont(ofSize: fontSizes[currentFontSizeIndex])
         }
 
