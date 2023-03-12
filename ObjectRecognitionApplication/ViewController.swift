@@ -25,7 +25,10 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         button.layer.borderColor = UIColor.black.cgColor
         button.layer.cornerRadius = 10
         button.setTitle("Finding all objects", for: .normal)
-        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
+        button.titleLabel?.textAlignment = .center
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 34)
+        button.titleLabel?.numberOfLines = 0
+        button.titleLabel?.lineBreakMode = .byWordWrapping
         button.setTitleColor(.black, for: .normal)
         button.addTarget(self, action: #selector(VisionObjectRecognitionViewController.button2), for: .touchUpInside)
         return button
@@ -42,6 +45,9 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         button.setTitleColor(.black, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
         button.layer.cornerRadius = 10
+        button.titleLabel?.textAlignment = .center
+        button.titleLabel?.numberOfLines = 0
+        button.titleLabel?.lineBreakMode = .byWordWrapping
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(ViewController.showOptions), for: .touchUpInside)
         if #available(iOS 13.0, *) {
@@ -63,6 +69,9 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         button.setTitle("App Info", for: .normal)
         button.setTitleColor(.black, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
+        button.titleLabel?.textAlignment = .center
+        button.titleLabel?.numberOfLines = 0
+        button.titleLabel?.lineBreakMode = .byWordWrapping
         button.layer.cornerRadius = 10
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(ViewController.showSettings), for: .touchUpInside)
@@ -87,12 +96,10 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             settingsButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
             settingsButton.heightAnchor.constraint(equalToConstant: 90),
 
-//            optionButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 2/3),
             optionButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
             optionButton.leadingAnchor.constraint(equalTo: settingsButton.trailingAnchor, constant: 10),
             optionButton.heightAnchor.constraint(equalToConstant: 90),
             optionButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-
 
             findObjectButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
             findObjectButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),

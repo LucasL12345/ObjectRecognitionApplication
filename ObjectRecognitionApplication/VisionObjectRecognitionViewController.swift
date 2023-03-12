@@ -63,7 +63,7 @@ class VisionObjectRecognitionViewController: ViewController {
             shapeLayer.addSublayer(textLayer)
             detectionOverlay.addSublayer(shapeLayer)
             
-            if findObjectButton.currentTitle == "Finding selected items" {
+            if findObjectButton.currentTitle == "Finding selected objects" {
                 for object in VisionObjectRecognitionViewController.selected_items {
                     if topLabelObservation.identifier == object {
                         AudioServicesPlayAlertSoundWithCompletion(SystemSoundID(kSystemSoundID_Vibrate)) { }
@@ -174,22 +174,16 @@ class VisionObjectRecognitionViewController: ViewController {
 
     
     @IBAction func button2(_ sender: Any) {
-        
-        if findObjectButton.currentTitle == "Finding selected items" {
-            findObjectButton.setTitle("Finding all items", for: .normal)
+        if findObjectButton.currentTitle == "Finding selected objects" {
+            findObjectButton.setTitle("Finding all objects", for: .normal)
         } else {
-            findObjectButton.setTitle("Finding selected items", for: .normal)
+            findObjectButton.setTitle("Finding selected objects", for: .normal)
         }
-        print(VisionObjectRecognitionViewController.selected_items)
-
     }
     
     func updateValue(_ value: [String]) {
-        print(value)
         VisionObjectRecognitionViewController.selected_items = value
     }
-
- 
 }
     
 
