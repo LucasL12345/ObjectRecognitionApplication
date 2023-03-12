@@ -2,22 +2,23 @@ import UIKit
 
 class SettingsViewController: UIViewController {
     
+    lazy var fontManager = FontManager.shared
+
+    lazy var currentFontSize: CGFloat = {
+        return fontManager.getFontSize()
+    }()
+
     let backButton = UIButton()
-    let fontSizes = [UIFont.systemFontSize+7, UIFont.systemFontSize + 10, UIFont.systemFontSize + 15]
-    var currentFontSizeIndex = 0
     var all_obj_vibration_mode = true
     var selected_obj_vibration_mode = true
-    let switchViewTextGap: CGFloat = 8.0
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Set the background color of the view to light gray
         view.backgroundColor = UIColor.white
         
         all_obj_vibration_mode = UserDefaults.standard.bool(forKey: "all_obj_vibration_mode")
         selected_obj_vibration_mode = UserDefaults.standard.bool(forKey: "selected_obj_vibration_mode")
-
         
         if let vibration1Row = view.subviews.first(where: { $0 is UITableViewCell && ($0 as! UITableViewCell).textLabel?.text == "All objects vibration" }) as? UITableViewCell,
            let vibration1Switch = vibration1Row.contentView.subviews.first(where: { $0 is UISwitch }) as? UISwitch {
@@ -33,7 +34,7 @@ class SettingsViewController: UIViewController {
             backButton.setTitleColor(.white, for: .normal)
             backButton.backgroundColor = .black
             backButton.layer.cornerRadius = 10
-            backButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
+            backButton.titleLabel?.font = UIFont.systemFont(ofSize: currentFontSize)
             backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
             backButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(backButton)
@@ -76,7 +77,7 @@ class SettingsViewController: UIViewController {
         let informationRow = UITableViewCell(style: .default, reuseIdentifier: nil)
         informationRow.backgroundColor = UIColor.white
         informationRow.textLabel?.text = "Information"
-        informationRow.textLabel?.font = UIFont.systemFont(ofSize: fontSizes[currentFontSizeIndex])
+        informationRow.textLabel?.font = UIFont.systemFont(ofSize: currentFontSize)
         informationRow.selectionStyle = .none
         informationRow.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
         informationRow.layer.cornerRadius = 10
@@ -93,6 +94,9 @@ class SettingsViewController: UIViewController {
             informationRow.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             informationRow.heightAnchor.constraint(equalToConstant: 50) // Change the height here
         ])
+        
+        let currentFontSize = FontManager.shared.getFontSize()
+
 
         if #available(iOS 13.0, *) {
             let arrowImageView = UIImageView(image: UIImage(systemName: "chevron.right"))
@@ -109,6 +113,7 @@ class SettingsViewController: UIViewController {
             ])
         }
     }
+
 
 
     private func addVibration1Row() {
@@ -143,7 +148,7 @@ class SettingsViewController: UIViewController {
         let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
         cell.backgroundColor = UIColor.white
         cell.textLabel?.text = title
-        cell.textLabel?.font = UIFont.systemFont(ofSize: fontSizes[currentFontSizeIndex])
+        cell.textLabel?.font = UIFont.systemFont(ofSize: currentFontSize)
         cell.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
         cell.selectionStyle = .none
         cell.layer.cornerRadius = 10
@@ -161,16 +166,25 @@ class SettingsViewController: UIViewController {
             switchView.widthAnchor.constraint(equalToConstant: 51),
             switchView.heightAnchor.constraint(equalToConstant: 31),
         ])
-        
+
         if let textLabel = cell.textLabel {
-            let textLabelHeight = textLabel.sizeThatFits(CGSize(width: textLabel.frame.size.width, height: CGFloat.greatestFiniteMagnitude)).height
-            let rowHeight = max(textLabelHeight, switchView.frame.size.height) + switchViewTextGap * 2 // add padding to the switchView
-            cell.heightAnchor.constraint(equalToConstant: rowHeight).isActive = true
             textLabel.numberOfLines = 0 // allow text to wrap to multiple lines
+            textLabel.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                textLabel.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: 15),
+                textLabel.topAnchor.constraint(equalTo: cell.contentView.topAnchor, constant: 10),
+                textLabel.trailingAnchor.constraint(equalTo: switchView.leadingAnchor, constant: -10)
+            ])
+            
+            let bottomConstraint = textLabel.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor, constant: -10)
+            bottomConstraint.priority = .defaultHigh
+            bottomConstraint.isActive = true
         }
-        
+
         return cell
     }
+
+
 
 
     @objc private func vibration1RowTapped(_ sender: UITapGestureRecognizer) {
@@ -199,7 +213,6 @@ class SettingsViewController: UIViewController {
             UserDefaults.standard.set(selected_obj_vibration_mode, forKey: "selected_obj_vibration_mode")
         }
     }
-
     
     
     // Action method to handle the "Vibration1" switch being toggled
@@ -207,41 +220,29 @@ class SettingsViewController: UIViewController {
         print("All objects vibration switch changed: \(sender.isOn)")
     }
     
+    
     // Action method to handle the "Vibration2" switch being toggled
     @objc private func vibration2SwitchChanged(_ sender: UISwitch) {
         print("Selected objects vibration switch changed: \(sender.isOn)")
     }
     
+    
     @objc func backButtonTapped() {
         self.dismiss(animated: true, completion: nil)
     }
 
-    @objc private func fontSizeButtonTapped() {
-        currentFontSizeIndex = (currentFontSizeIndex + 1) % fontSizes.count
-
-        // Update font size for the back button
-        backButton.titleLabel?.font = UIFont.systemFont(ofSize: fontSizes[currentFontSizeIndex])
-
-        // Update font size for the Information row
-        if let informationRow = view.subviews.first(where: { $0 is UITableViewCell && ($0 as! UITableViewCell).textLabel?.text == "Information" }) as? UITableViewCell {
-            informationRow.textLabel?.font = UIFont.systemFont(ofSize: fontSizes[currentFontSizeIndex])
+    
+    @objc func fontSizeButtonTapped() {
+        let newFontSize = fontManager.increaseFontSize()
+        backButton.titleLabel?.font = UIFont.systemFont(ofSize: newFontSize)
+        
+        for subview in view.subviews {
+            if let cell = subview as? UITableViewCell, let textLabel = cell.textLabel {
+                textLabel.font = UIFont.systemFont(ofSize: newFontSize)
+            }
         }
-
-        // Update font size for the Vibration1 row
-        if let vibration1Row = view.subviews.first(where: { $0 is UITableViewCell && ($0 as! UITableViewCell).textLabel?.text == "All objects vibration" }) as? UITableViewCell {
-            vibration1Row.textLabel?.font = UIFont.systemFont(ofSize: fontSizes[currentFontSizeIndex])
-        }
-
-        // Update font size for the Vibration2 row
-        if let vibration2Row = view.subviews.first(where: { $0 is UITableViewCell && ($0 as! UITableViewCell).textLabel?.text == "Selected objects vibration" }) as? UITableViewCell {
-            vibration2Row.textLabel?.font = UIFont.systemFont(ofSize: fontSizes[currentFontSizeIndex])
-        }
-
-        // Save font size index in user defaults
-        UserDefaults.standard.set(currentFontSizeIndex, forKey: "currentFontSizeIndex")
     }
 
-    
     
     @objc func showInformation() {
         let informationVC = InformationViewController()

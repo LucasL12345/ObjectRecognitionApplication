@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		A0C3868C29B8F62900A9566E /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C3868B29B8F62900A9566E /* SettingsViewController.swift */; };
+		A0C3868E29BE1D1400A9566E /* FontManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C3868D29BE1D1400A9566E /* FontManager.swift */; };
 		A0CDBC5F29A1A01D009CE398 /* ObjectRecognitionApplicationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CDBC5E29A1A01D009CE398 /* ObjectRecognitionApplicationTests.swift */; };
 		A0CDBC9C29A2F162009CE398 /* InformationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CDBC9B29A2F162009CE398 /* InformationViewController.swift */; };
 		A0CDBC9E29A2F19A009CE398 /* OptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CDBC9D29A2F19A009CE398 /* OptionsViewController.swift */; };
@@ -31,6 +32,7 @@
 /* Begin PBXFileReference section */
 		A0388083299C14D800365541 /* ObjectRecognitionApplication.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ObjectRecognitionApplication.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0C3868B29B8F62900A9566E /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		A0C3868D29BE1D1400A9566E /* FontManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontManager.swift; sourceTree = "<group>"; };
 		A0CDBC5C29A1A01D009CE398 /* ObjectRecognitionApplicationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ObjectRecognitionApplicationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0CDBC5E29A1A01D009CE398 /* ObjectRecognitionApplicationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectRecognitionApplicationTests.swift; sourceTree = "<group>"; };
 		A0CDBC9B29A2F162009CE398 /* InformationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformationViewController.swift; sourceTree = "<group>"; };
@@ -88,6 +90,7 @@
 				A0C3868B29B8F62900A9566E /* SettingsViewController.swift */,
 				A0CDBC9B29A2F162009CE398 /* InformationViewController.swift */,
 				A0CDBC9D29A2F19A009CE398 /* OptionsViewController.swift */,
+				A0C3868D29BE1D1400A9566E /* FontManager.swift */,
 				FAD500A21ED668B60074D713 /* Main.storyboard */,
 				FAD500A51ED668B60074D713 /* Assets.xcassets */,
 				FAD500AA1ED668B60074D713 /* Info.plist */,
@@ -209,6 +212,7 @@
 			files = (
 				FAB417F62099308400494E9C /* VisionObjectRecognitionViewController.swift in Sources */,
 				FAD500A11ED668B60074D713 /* ViewController.swift in Sources */,
+				A0C3868E29BE1D1400A9566E /* FontManager.swift in Sources */,
 				FAD5009F1ED668B60074D713 /* AppDelegate.swift in Sources */,
 				A0CDBC9C29A2F162009CE398 /* InformationViewController.swift in Sources */,
 				A0CDBC9E29A2F19A009CE398 /* OptionsViewController.swift in Sources */,
