@@ -9,8 +9,8 @@ class SettingsViewController: UIViewController {
     }()
 
     let backButton = UIButton()
-    var all_obj_vibration_mode = true
-    var selected_obj_vibration_mode = true
+    var all_obj_vibration_mode = false
+    var selected_obj_vibration_mode = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -127,6 +127,10 @@ class SettingsViewController: UIViewController {
             vibration1Row.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             vibration1Row.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
         ])
+        
+        // Add a tap gesture recognizer to the row
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(vibration1RowTapped(_:)))
+        vibration1Row.addGestureRecognizer(tapGestureRecognizer)
     }
 
     private func addVibration2Row() {
@@ -140,52 +144,11 @@ class SettingsViewController: UIViewController {
             vibration2Row.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             vibration2Row.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
         ])
-    }
-
-
-    // Helper method to create a row with a given title
-    private func createRow(title: String) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-        cell.backgroundColor = UIColor.white
-        cell.textLabel?.text = title
-        cell.textLabel?.font = UIFont.systemFont(ofSize: currentFontSize)
-        cell.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
-        cell.selectionStyle = .none
-        cell.layer.cornerRadius = 10
-        cell.clipsToBounds = true
-        cell.layer.borderWidth = 1.0
-        cell.layer.borderColor = UIColor.gray.cgColor
         
-        let switchView = UISwitch()
-        switchView.addTarget(self, action: #selector(switchToggled(_:)), for: .valueChanged)
-        cell.contentView.addSubview(switchView)
-        switchView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            switchView.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
-            switchView.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -15),
-            switchView.widthAnchor.constraint(equalToConstant: 51),
-            switchView.heightAnchor.constraint(equalToConstant: 31),
-        ])
-
-        if let textLabel = cell.textLabel {
-            textLabel.numberOfLines = 0 // allow text to wrap to multiple lines
-            textLabel.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([
-                textLabel.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: 15),
-                textLabel.topAnchor.constraint(equalTo: cell.contentView.topAnchor, constant: 10),
-                textLabel.trailingAnchor.constraint(equalTo: switchView.leadingAnchor, constant: -10)
-            ])
-            
-            let bottomConstraint = textLabel.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor, constant: -10)
-            bottomConstraint.priority = .defaultHigh
-            bottomConstraint.isActive = true
-        }
-
-        return cell
+        // Add a tap gesture recognizer to the row
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(vibration2RowTapped(_:)))
+        vibration2Row.addGestureRecognizer(tapGestureRecognizer)
     }
-
-
-
 
     @objc private func vibration1RowTapped(_ sender: UITapGestureRecognizer) {
         if let cell = sender.view as? UITableViewCell,
@@ -212,6 +175,60 @@ class SettingsViewController: UIViewController {
             selected_obj_vibration_mode.toggle()
             UserDefaults.standard.set(selected_obj_vibration_mode, forKey: "selected_obj_vibration_mode")
         }
+        print(all_obj_vibration_mode)
+        print(selected_obj_vibration_mode)
+    }
+
+
+    // Helper method to create a row with a given title
+    private func createRow(title: String) -> UITableViewCell {
+        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+        cell.backgroundColor = UIColor.white
+        cell.textLabel?.text = title
+        cell.textLabel?.font = UIFont.systemFont(ofSize: currentFontSize)
+        cell.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
+        cell.selectionStyle = .none
+        cell.layer.cornerRadius = 10
+        cell.clipsToBounds = true
+        cell.layer.borderWidth = 1.0
+        cell.layer.borderColor = UIColor.gray.cgColor
+
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(switchToggled(_:)))
+        cell.addGestureRecognizer(tapGestureRecognizer)
+
+        let switchView = UISwitch()
+        switchView.tag = (title == "All objects vibration") ? 0 : 1
+        switchView.addTarget(self, action: #selector(switchToggled(_:)), for: .valueChanged)
+        cell.contentView.addSubview(switchView)
+        switchView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            switchView.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
+            switchView.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -15),
+            switchView.widthAnchor.constraint(equalToConstant: 51),
+            switchView.heightAnchor.constraint(equalToConstant: 31),
+        ])
+
+        if let textLabel = cell.textLabel {
+            textLabel.numberOfLines = 0 // allow text to wrap to multiple lines
+            textLabel.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                textLabel.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: 15),
+                textLabel.topAnchor.constraint(equalTo: cell.contentView.topAnchor, constant: 10),
+                textLabel.trailingAnchor.constraint(equalTo: switchView.leadingAnchor, constant: -10)
+            ])
+
+            let bottomConstraint = textLabel.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor, constant: -10)
+            bottomConstraint.priority = .defaultHigh
+            bottomConstraint.isActive = true
+        }
+
+        if title == "All objects vibration" {
+            switchView.isOn = all_obj_vibration_mode
+        } else {
+            switchView.isOn = selected_obj_vibration_mode
+        }
+
+        return cell
     }
     
     
