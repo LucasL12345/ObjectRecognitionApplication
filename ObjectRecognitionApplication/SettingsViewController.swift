@@ -11,6 +11,7 @@ class SettingsViewController: UIViewController {
     let backButton = UIButton()
     var all_obj_vibration_mode = false
     var selected_obj_vibration_mode = false
+    var dark_mode = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,6 +71,7 @@ class SettingsViewController: UIViewController {
         addInformationRow()
         addVibration1Row()
         addVibration2Row()
+        addDarkMode()
     }
     
     
@@ -95,9 +97,6 @@ class SettingsViewController: UIViewController {
             informationRow.heightAnchor.constraint(equalToConstant: 50) // Change the height here
         ])
         
-        let currentFontSize = FontManager.shared.getFontSize()
-
-
         if #available(iOS 13.0, *) {
             let arrowImageView = UIImageView(image: UIImage(systemName: "chevron.right"))
             arrowImageView.tintColor = .black
@@ -146,6 +145,22 @@ class SettingsViewController: UIViewController {
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(vibration2RowTapped(_:)))
         vibration2Row.addGestureRecognizer(tapGestureRecognizer)
     }
+    
+    private func addDarkMode() {
+        let darkMode = createRow(title: "Dark mode")
+        darkMode.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        view.addSubview(darkMode)
+        
+        darkMode.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            darkMode.topAnchor.constraint(equalTo: view.subviews[view.subviews.count - 2].bottomAnchor, constant: 5),
+            darkMode.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            darkMode.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+        ])
+
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(darkModeTapped(_:)))
+        darkMode.addGestureRecognizer(tapGestureRecognizer)
+    }
 
     
     @objc private func vibration1RowTapped(_ sender: UITapGestureRecognizer) {
@@ -164,6 +179,14 @@ class SettingsViewController: UIViewController {
             selected_obj_vibration_mode = switchView.isOn
         }
     }
+    
+    @objc private func darkModeTapped(_ sender: UITapGestureRecognizer) {
+        if let cell = sender.view as? UITableViewCell,
+           let switchView = cell.contentView.subviews.first(where: { $0 is UISwitch }) as? UISwitch {
+            switchView.setOn(!switchView.isOn, animated: true)
+            dark_mode = switchView.isOn
+        }
+    }
 
 
     @objc private func switchToggled(_ sender: UISwitch) {
@@ -173,7 +196,12 @@ class SettingsViewController: UIViewController {
         } else if sender.tag == 1 {
             selected_obj_vibration_mode.toggle()
             UserDefaults.standard.set(selected_obj_vibration_mode, forKey: "selected_obj_vibration_mode")
+        } else if sender.tag == 2 {
+            dark_mode.toggle()
+            UserDefaults.standard.set(dark_mode, forKey: "dark_mode")
         }
+        
+        print(sender.tag)
     }
 
 
@@ -194,7 +222,7 @@ class SettingsViewController: UIViewController {
         cell.addGestureRecognizer(tapGestureRecognizer)
 
         let switchView = UISwitch()
-        switchView.tag = (title == "All objects vibration") ? 0 : 1
+        switchView.tag = (title == "All objects vibration") ? 0 : (title == "Selected objects vibration") ? 1 : 2
         switchView.addTarget(self, action: #selector(switchToggled(_:)), for: .valueChanged)
         cell.contentView.addSubview(switchView)
         switchView.translatesAutoresizingMaskIntoConstraints = false

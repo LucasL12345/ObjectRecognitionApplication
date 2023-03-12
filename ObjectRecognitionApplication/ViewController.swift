@@ -50,12 +50,6 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         button.titleLabel?.lineBreakMode = .byWordWrapping
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(ViewController.showOptions), for: .touchUpInside)
-        if #available(iOS 13.0, *) {
-            button.setImage(UIImage(systemName: "chevron.right"), for: .normal)
-        } else {
-            button.setImage(UIImage(named: "chevron.right"), for: .normal)
-        }
-        button.semanticContentAttribute = .forceRightToLeft
 
         return button
     }()
