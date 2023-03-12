@@ -79,7 +79,7 @@ class SettingsViewController: UIViewController {
         informationRow.textLabel?.text = "Information"
         informationRow.textLabel?.font = UIFont.systemFont(ofSize: currentFontSize)
         informationRow.selectionStyle = .none
-        informationRow.separatorInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 15)
+        informationRow.separatorInset = UIEdgeInsets(top: 0, left: 7, bottom: 0, right: 15)
         informationRow.layer.cornerRadius = 10
         informationRow.clipsToBounds = true
         informationRow.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showInformation)))

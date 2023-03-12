@@ -155,7 +155,7 @@ class OptionsViewController: UIViewController, AVSpeechSynthesizerDelegate  {
             button.titleLabel?.font = UIFont.systemFont(ofSize: currentFontSize)
         }
     
-        confirmButton.titleLabel?.font = UIFont.systemFont(ofSize: currentFontSize)
+        confirmButton.titleLabel?.font = UIFont.systemFont(ofSize: currentFontSize + 8)
         confirmButton.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(confirmButton)
 
@@ -199,7 +199,7 @@ class OptionsViewController: UIViewController, AVSpeechSynthesizerDelegate  {
     @objc func fontSizeButtonTapped() {
         let newFontSize = fontManager.increaseFontSize()
         backButton.titleLabel?.font = UIFont.systemFont(ofSize: newFontSize)
-        confirmButton.titleLabel?.font = UIFont.systemFont(ofSize: newFontSize)
+        confirmButton.titleLabel?.font = UIFont.systemFont(ofSize: newFontSize + 8)
         titleLabel.font = UIFont.systemFont(ofSize: newFontSize + 5)
         
         for button in buttons {

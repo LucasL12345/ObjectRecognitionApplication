@@ -63,7 +63,7 @@ class InformationViewController: UIViewController {
         self.view.backgroundColor = .white
         
         backButton.titleLabel?.font = UIFont.systemFont(ofSize: currentFontSize)
-        titleLabel.font = UIFont.boldSystemFont(ofSize: currentFontSize)
+        titleLabel.font = UIFont.boldSystemFont(ofSize: currentFontSize + 5)
         paragraphLabel.font = UIFont.systemFont(ofSize: currentFontSize)
         
         if let index = UserDefaults.standard.object(forKey: "currentFontSizeIndex") as? Int {
@@ -116,7 +116,7 @@ class InformationViewController: UIViewController {
     @objc func fontSizeButtonTapped() {
         let newFontSize = fontManager.increaseFontSize()
         backButton.titleLabel?.font = UIFont.systemFont(ofSize: newFontSize)
-        titleLabel.font = UIFont.boldSystemFont(ofSize: newFontSize)
+        titleLabel.font = UIFont.boldSystemFont(ofSize: newFontSize + 5)
         paragraphLabel.font = UIFont.systemFont(ofSize: newFontSize)
     }
 
