@@ -66,12 +66,12 @@ class SettingsViewController: UIViewController {
             fontSizeButton.heightAnchor.constraint(equalToConstant: 60),
         ])
         
-        
         // Add the three rows as subviews to the main view
         addInformationRow()
         addVibration1Row()
         addVibration2Row()
     }
+    
     
     private func addInformationRow() {
         let informationRow = UITableViewCell(style: .default, reuseIdentifier: nil)
@@ -79,7 +79,7 @@ class SettingsViewController: UIViewController {
         informationRow.textLabel?.text = "Information"
         informationRow.textLabel?.font = UIFont.systemFont(ofSize: currentFontSize)
         informationRow.selectionStyle = .none
-        informationRow.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
+        informationRow.separatorInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 15)
         informationRow.layer.cornerRadius = 10
         informationRow.clipsToBounds = true
         informationRow.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showInformation)))
@@ -115,7 +115,6 @@ class SettingsViewController: UIViewController {
     }
 
 
-
     private func addVibration1Row() {
         let vibration1Row = createRow(title: "All objects vibration")
         vibration1Row.heightAnchor.constraint(equalToConstant: 50).isActive = true // Change the height here
@@ -128,14 +127,13 @@ class SettingsViewController: UIViewController {
             vibration1Row.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
         ])
         
-        // Add a tap gesture recognizer to the row
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(vibration1RowTapped(_:)))
         vibration1Row.addGestureRecognizer(tapGestureRecognizer)
     }
 
     private func addVibration2Row() {
         let vibration2Row = createRow(title: "Selected objects vibration")
-        vibration2Row.heightAnchor.constraint(equalToConstant: 50).isActive = true // Change the height here
+        vibration2Row.heightAnchor.constraint(equalToConstant: 50).isActive = true
         view.addSubview(vibration2Row)
         
         vibration2Row.translatesAutoresizingMaskIntoConstraints = false
@@ -144,12 +142,12 @@ class SettingsViewController: UIViewController {
             vibration2Row.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             vibration2Row.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
         ])
-        
-        // Add a tap gesture recognizer to the row
+
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(vibration2RowTapped(_:)))
         vibration2Row.addGestureRecognizer(tapGestureRecognizer)
     }
 
+    
     @objc private func vibration1RowTapped(_ sender: UITapGestureRecognizer) {
         if let cell = sender.view as? UITableViewCell,
            let switchView = cell.contentView.subviews.first(where: { $0 is UISwitch }) as? UISwitch {
@@ -158,6 +156,7 @@ class SettingsViewController: UIViewController {
         }
     }
 
+    
     @objc private func vibration2RowTapped(_ sender: UITapGestureRecognizer) {
         if let cell = sender.view as? UITableViewCell,
            let switchView = cell.contentView.subviews.first(where: { $0 is UISwitch }) as? UISwitch {
@@ -175,8 +174,6 @@ class SettingsViewController: UIViewController {
             selected_obj_vibration_mode.toggle()
             UserDefaults.standard.set(selected_obj_vibration_mode, forKey: "selected_obj_vibration_mode")
         }
-        print(all_obj_vibration_mode)
-        print(selected_obj_vibration_mode)
     }
 
 
@@ -229,18 +226,6 @@ class SettingsViewController: UIViewController {
         }
 
         return cell
-    }
-    
-    
-    // Action method to handle the "Vibration1" switch being toggled
-    @objc private func vibration1SwitchChanged(_ sender: UISwitch) {
-        print("All objects vibration switch changed: \(sender.isOn)")
-    }
-    
-    
-    // Action method to handle the "Vibration2" switch being toggled
-    @objc private func vibration2SwitchChanged(_ sender: UISwitch) {
-        print("Selected objects vibration switch changed: \(sender.isOn)")
     }
     
     
