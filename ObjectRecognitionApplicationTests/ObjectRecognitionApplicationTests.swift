@@ -1,4 +1,5 @@
 import XCTest
+import AVFAudio
 
 @testable import ObjectRecognitionApplication
 
@@ -46,23 +47,26 @@ final class ObjectRecognitionApplicationTests: XCTestCase {
         XCTAssertNotEqual(viewController.detectionOverlay.bounds, initialBounds, "Expected detection overlay bounds to change after updating geometry")
         XCTAssertEqual(viewController.detectionOverlay.position, CGPoint(x: 100, y: 150), "Expected detection overlay to be centered in preview view")
     }
+    
+    func testFontManagerIncreaseFontSize() throws {
+        let fontManager = FontManager.shared
+        let initialFontSizeIndex = fontManager.currentFontSizeIndex
+        let newFontSize = fontManager.increaseFontSize()
+        XCTAssertEqual(fontManager.currentFontSizeIndex, (initialFontSizeIndex + 1) % fontManager.fontSizes.count, "Expected font size index to increase by 1 modulo the number of available font sizes")
+        XCTAssertEqual(newFontSize, fontManager.fontSizes[fontManager.currentFontSizeIndex], "Expected new font size to match updated font size index")
+    }
 
 
 }
 
 
-class OptionsViewControllerTests: XCTestCase {
+class ChooseItemsViewControllerTests: XCTestCase {
 
-    var viewController: OptionsViewController!
+    var viewController: ChooseItemsViewController!
 
     override func setUpWithError() throws {
         try super.setUpWithError()
-        viewController = OptionsViewController()
-    }
-
-    override func tearDownWithError() throws {
-        try super.tearDownWithError()
-        viewController = nil
+        viewController = ChooseItemsViewController()
     }
 
     func testBackButtonTapped() throws {
@@ -99,11 +103,6 @@ class InformationViewControllerTests: XCTestCase {
         viewController = InformationViewController()
     }
     
-    override func tearDownWithError() throws {
-        try super.tearDownWithError()
-        viewController = nil
-    }
-    
     func testBackButtonTapped() throws {
         let window = UIWindow()
         window.rootViewController = viewController
@@ -129,17 +128,12 @@ class InformationViewControllerTests: XCTestCase {
     // Additional tests for other UI elements and layout constraints could be added here
     class OptionsViewControllerTests: XCTestCase {
         
-        var optionsViewController: OptionsViewController!
+        var optionsViewController: ChooseItemsViewController!
         
         override func setUp() {
             super.setUp()
-            optionsViewController = OptionsViewController()
+            optionsViewController = ChooseItemsViewController()
             _ = optionsViewController.view // Load view hierarchy
-        }
-        
-        override func tearDown() {
-            optionsViewController = nil
-            super.tearDown()
         }
         
         func testScrollViewHasButtons() {
@@ -156,15 +150,6 @@ class InformationViewControllerTests: XCTestCase {
         func testConfirmButtonTapped() {
             optionsViewController.confirmButton.sendActions(for: .touchUpInside)
             XCTAssertTrue(optionsViewController.synthesizer.isSpeaking, "AVSpeechSynthesizer should start speaking when confirm button is tapped")
-        }
-        
-        func testFontSizeButtonTapped() {
-            let originalFontSizeIndex = optionsViewController.currentFontSizeIndex
-            optionsViewController.fontSizeButtonTapped()
-            XCTAssertNotEqual(optionsViewController.currentFontSizeIndex, originalFontSizeIndex, "Current font size index should change when font size button is tapped")
-            XCTAssertNotEqual(optionsViewController.titleLabel.font.pointSize, UIFont.boldSystemFont(ofSize: optionsViewController.fontSizes[originalFontSizeIndex] + 5).pointSize, "Title label font size should change when font size button is tapped")
-            XCTAssertNotEqual(optionsViewController.backButton.titleLabel?.font.pointSize, UIFont.systemFont(ofSize: optionsViewController.fontSizes[originalFontSizeIndex]).pointSize, "Back button font size should change when font size button is tapped")
-            XCTAssertNotEqual(optionsViewController.confirmButton.titleLabel?.font.pointSize, UIFont.boldSystemFont(ofSize: optionsViewController.fontSizes[originalFontSizeIndex] + 5).pointSize, "Confirm button font size should change when font size button is tapped")
         }
         
         func testBackButtonTapped() {
@@ -185,6 +170,66 @@ class InformationViewControllerTests: XCTestCase {
         }
         
     }
+    
+    class SynthesizerTests: XCTestCase {
+        
+        var synthesizer: AVSpeechSynthesizer!
+        let text = "Hello, World!"
+        
+        override func setUpWithError() throws {
+            try super.setUpWithError()
+            synthesizer = AVSpeechSynthesizer()
+        }
+        
+        func testSpeak() throws {
+            let expectation = self.expectation(description: "Speech synthesis")
+            let utterance = AVSpeechUtterance(string: text)
+            synthesizer.speak(utterance)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                expectation.fulfill()
+            }
+            waitForExpectations(timeout: 3, handler: nil)
+            XCTAssertTrue(synthesizer.isSpeaking, "Expected speech synthesis to be in progress")
+        }
+        
+        func testStopSpeaking() throws {
+            let expectation = self.expectation(description: "Speech synthesis")
+            let utterance = AVSpeechUtterance(string: text)
+            synthesizer.speak(utterance)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                self.synthesizer.stopSpeaking(at: .immediate)
+                expectation.fulfill()
+            }
+            waitForExpectations(timeout: 3, handler: nil)
+            XCTAssertFalse(synthesizer.isSpeaking, "Expected speech synthesis to be stopped")
+        }
+        
+    }
+    
+    class FontManagerTests: XCTestCase {
+        
+        var fontManager: FontManager!
+        
+        override func setUpWithError() throws {
+            try super.setUpWithError()
+            fontManager = FontManager.shared
+        }
+        
+        override func tearDownWithError() throws {
+            try super.tearDownWithError()
+            fontManager = nil
+        }
+        
+        func testFontManagerIncreaseFontSize() throws {
+            let initialIndex = fontManager.currentFontSizeIndex
+            let initialFontSize = fontManager.getFontSize()
+            let newFontSize = fontManager.increaseFontSize()
+            let expectedIndex = (initialIndex + 1) % fontManager.fontSizes.count
+            let expectedFontSize = fontManager.fontSizes[expectedIndex]
+            XCTAssertEqual(newFontSize, expectedFontSize, "Expected increased font size to match expected font size")
+            XCTAssertEqual(fontManager.currentFontSizeIndex, expectedIndex, "Expected font size index to be updated after increasing font size")
+            XCTAssertEqual(initialFontSize, fontManager.getFontSize(), "Expected getFontSize() to return current font size")
+        }
+        
+    }
 }
-
-
