@@ -83,13 +83,13 @@ class VisionObjectRecognitionViewController: ViewController {
             
             if findObjectButton.currentTitle == "Finding selected objects" {
                 for object in VisionObjectRecognitionViewController.selected_items {
-                    if topLabelObservation.identifier == object {
+                    if topLabelObservation.identifier == object && VisionObjectRecognitionViewController.all_obj_vibration_mode {
                         AudioServicesPlayAlertSoundWithCompletion(SystemSoundID(kSystemSoundID_Vibrate)) { }
                     }
                 }
             } else {
                 for object in all_items {
-                    if topLabelObservation.identifier == object {
+                    if topLabelObservation.identifier == object && VisionObjectRecognitionViewController.selected_obj_vibration_mode {
                         AudioServicesPlayAlertSoundWithCompletion(SystemSoundID(kSystemSoundID_Vibrate)) { }
                     }
                 }
@@ -191,14 +191,12 @@ class VisionObjectRecognitionViewController: ViewController {
     }
 
     
-    @IBAction func button2(_ sender: Any) {
+    @IBAction func findingObjectsButton(_ sender: Any) {
         if findObjectButton.currentTitle == "Finding selected objects" {
             findObjectButton.setTitle("Finding all objects", for: .normal)
         } else {
             findObjectButton.setTitle("Finding selected objects", for: .normal)
         }
-        print(VisionObjectRecognitionViewController.all_obj_vibration_mode)
-        print(VisionObjectRecognitionViewController.selected_obj_vibration_mode)
     }
     
     func updateValue(_ value: [String]) {

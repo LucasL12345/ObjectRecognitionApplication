@@ -30,7 +30,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         button.titleLabel?.numberOfLines = 0
         button.titleLabel?.lineBreakMode = .byWordWrapping
         button.setTitleColor(.black, for: .normal)
-        button.addTarget(self, action: #selector(VisionObjectRecognitionViewController.button2), for: .touchUpInside)
+        button.addTarget(self, action: #selector(VisionObjectRecognitionViewController.findingObjectsButton(_:)), for: .touchUpInside)
         return button
     }()
     
