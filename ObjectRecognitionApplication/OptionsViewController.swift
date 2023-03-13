@@ -171,7 +171,7 @@ class OptionsViewController: UIViewController, AVSpeechSynthesizerDelegate  {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         
-        let buttonWidth = (view.bounds.width - 30) / 2 // subtracting 30 instead of 20 to account for the gap between the buttons
+        let buttonWidth = (view.bounds.width - 30) / 2
         let buttonHeight: CGFloat = 60
         let topMargin: CGFloat = 10.0
         let numberOfColumns = 2
@@ -181,7 +181,7 @@ class OptionsViewController: UIViewController, AVSpeechSynthesizerDelegate  {
             let col = i % numberOfColumns // modulus to determine column number
             let button = buttons[i]
             
-            let x = CGFloat(col) * (buttonWidth + 10) + 10 // adding 10 for gap between buttons
+            let x = CGFloat(col) * (buttonWidth + 10) + 10
             let y = topMargin + CGFloat(row) * (buttonHeight + 10)
             button.frame = CGRect(x: x, y: y, width: buttonWidth, height: buttonHeight)
         }
@@ -235,13 +235,13 @@ class OptionsViewController: UIViewController, AVSpeechSynthesizerDelegate  {
         guard let presentingVC = presentingViewController as? VisionObjectRecognitionViewController else {
             fatalError("Unable to get presenting view controller")
         }
+        
         visionObjectVC = presentingVC
         visionObjectVC.updateValue(selected_items)
 
     }
 
 
-    
     @objc func confirmButtonTapped() {
         if isConfirmationDone {
             return
@@ -261,6 +261,4 @@ class OptionsViewController: UIViewController, AVSpeechSynthesizerDelegate  {
         self.dismiss(animated: true, completion: nil)
     }
 
-
-        
 }
