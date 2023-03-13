@@ -9,17 +9,36 @@ class SettingsViewController: UIViewController {
     }()
 
     let backButton = UIButton()
-    var all_obj_vibration_mode = false
-    var selected_obj_vibration_mode = false
-    var dark_mode = false
+    var all_obj_vibration_mode = UserDefaults.standard.bool(forKey: "all_obj_vibration_mode")
+    var selected_obj_vibration_mode = UserDefaults.standard.bool(forKey: "selected_obj_vibration_mode")
+    var dark_mode = UserDefaults.standard.bool(forKey: "dark_mode")
+    
+    // Add this variable to track if the app has launched before
+    var app_has_launched_before = UserDefaults.standard.bool(forKey: "app_has_launched_before")
+
+    // Add this method to initialize the variables
+    private func initializeVariables() {
+        // If the app has never launched before, set dark_mode to true
+        if !app_has_launched_before {
+            dark_mode = true
+            UserDefaults.standard.set(true, forKey: "all_obj_vibration_mode")
+            UserDefaults.standard.set(true, forKey: "selected_obj_vibration_mode")
+            UserDefaults.standard.set(true, forKey: "app_has_launched_before")
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        initializeVariables()
         view.backgroundColor = UIColor.white
-        
+
         all_obj_vibration_mode = UserDefaults.standard.bool(forKey: "all_obj_vibration_mode")
         selected_obj_vibration_mode = UserDefaults.standard.bool(forKey: "selected_obj_vibration_mode")
+        dark_mode = UserDefaults.standard.bool(forKey: "dark_mode")
+        
+        
+        
         
         if let vibration1Row = view.subviews.first(where: { $0 is UITableViewCell && ($0 as! UITableViewCell).textLabel?.text == "All objects vibration" }) as? UITableViewCell,
            let vibration1Switch = vibration1Row.contentView.subviews.first(where: { $0 is UISwitch }) as? UISwitch {
@@ -30,6 +49,12 @@ class SettingsViewController: UIViewController {
            let vibration2Switch = vibration2Row.contentView.subviews.first(where: { $0 is UISwitch }) as? UISwitch {
             vibration2Switch.isOn = selected_obj_vibration_mode
         }
+
+        if let darkModeRow = view.subviews.first(where: { $0 is UITableViewCell && ($0 as! UITableViewCell).textLabel?.text == "Dark mode" }) as? UITableViewCell,
+           let darkModeSwitch = darkModeRow.contentView.subviews.first(where: { $0 is UISwitch }) as? UISwitch {
+            darkModeSwitch.isOn = dark_mode
+        }
+
     
         backButton.setTitle("Back", for: .normal)
             backButton.setTitleColor(.white, for: .normal)
@@ -157,6 +182,11 @@ class SettingsViewController: UIViewController {
             darkMode.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             darkMode.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
         ])
+        
+        if let darkModeRow = view.subviews.first(where: { $0 is UITableViewCell && ($0 as! UITableViewCell).textLabel?.text == "Dark mode" }) as? UITableViewCell,
+           let darkModeSwitch = darkModeRow.contentView.subviews.first(where: { $0 is UISwitch }) as? UISwitch {
+            darkModeSwitch.isOn = dark_mode
+        }
 
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(darkModeTapped(_:)))
         darkMode.addGestureRecognizer(tapGestureRecognizer)
