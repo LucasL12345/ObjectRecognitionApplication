@@ -19,10 +19,9 @@ class SettingsViewController: UIViewController {
     var all_obj_vibration_mode = UserDefaults.standard.bool(forKey: "all_obj_vibration_mode")
     var selected_obj_vibration_mode = UserDefaults.standard.bool(forKey: "selected_obj_vibration_mode")
     var dark_mode = UserDefaults.standard.bool(forKey: "dark_mode")
-    
-    // Add this variable to track if the app has launched before
     var app_has_launched_before = UserDefaults.standard.bool(forKey: "app_has_launched_before")
 
+    
     // Add this method to initialize the variables
     private func initializeVariables() {
         // If the app has never launched before, set dark_mode to true
@@ -34,6 +33,7 @@ class SettingsViewController: UIViewController {
         }
     }
 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -44,17 +44,14 @@ class SettingsViewController: UIViewController {
         selected_obj_vibration_mode = UserDefaults.standard.bool(forKey: "selected_obj_vibration_mode")
         dark_mode = UserDefaults.standard.bool(forKey: "dark_mode")
         
-        
-        
-        
-        if let vibration1Row = view.subviews.first(where: { $0 is UITableViewCell && ($0 as! UITableViewCell).textLabel?.text == "All objects vibration" }) as? UITableViewCell,
-           let vibration1Switch = vibration1Row.contentView.subviews.first(where: { $0 is UISwitch }) as? UISwitch {
-            vibration1Switch.isOn = all_obj_vibration_mode
+        if let allObjectVibrationRow = view.subviews.first(where: { $0 is UITableViewCell && ($0 as! UITableViewCell).textLabel?.text == "All objects vibration" }) as? UITableViewCell,
+           let allObjectVibrationSwitch = allObjectVibrationRow.contentView.subviews.first(where: { $0 is UISwitch }) as? UISwitch {
+            allObjectVibrationSwitch.isOn = all_obj_vibration_mode
         }
 
-        if let vibration2Row = view.subviews.first(where: { $0 is UITableViewCell && ($0 as! UITableViewCell).textLabel?.text == "Selected objects vibration" }) as? UITableViewCell,
-           let vibration2Switch = vibration2Row.contentView.subviews.first(where: { $0 is UISwitch }) as? UISwitch {
-            vibration2Switch.isOn = selected_obj_vibration_mode
+        if let selectedObjectVibrationRow = view.subviews.first(where: { $0 is UITableViewCell && ($0 as! UITableViewCell).textLabel?.text == "Selected objects vibration" }) as? UITableViewCell,
+           let selectedObjectVibrationSwitch = selectedObjectVibrationRow.contentView.subviews.first(where: { $0 is UISwitch }) as? UISwitch {
+            selectedObjectVibrationSwitch.isOn = selected_obj_vibration_mode
         }
 
         if let darkModeRow = view.subviews.first(where: { $0 is UITableViewCell && ($0 as! UITableViewCell).textLabel?.text == "Dark mode" }) as? UITableViewCell,
@@ -112,8 +109,8 @@ class SettingsViewController: UIViewController {
         
         // Add the three rows as subviews to the main view
         addInformationRow()
-        addVibration1Row()
-        addVibration2Row()
+        addAllObjectVibrationRow()
+        addSelectedObjectVibrationRow()
         addDarkMode()
     }
     
@@ -159,36 +156,36 @@ class SettingsViewController: UIViewController {
     }
 
 
-    private func addVibration1Row() {
-        let vibration1Row = createRow(title: "All objects vibration")
-        vibration1Row.heightAnchor.constraint(equalToConstant: 50).isActive = true // Change the height here
-        view.addSubview(vibration1Row)
+    private func addAllObjectVibrationRow() {
+        let allObjectVibrationRow = createRow(title: "All objects vibration")
+        allObjectVibrationRow.heightAnchor.constraint(equalToConstant: 50).isActive = true // Change the height here
+        view.addSubview(allObjectVibrationRow)
         
-        vibration1Row.translatesAutoresizingMaskIntoConstraints = false
+        allObjectVibrationRow.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            vibration1Row.topAnchor.constraint(equalTo: view.subviews[view.subviews.count - 2].bottomAnchor, constant: 5),
-            vibration1Row.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            vibration1Row.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            allObjectVibrationRow.topAnchor.constraint(equalTo: view.subviews[view.subviews.count - 2].bottomAnchor, constant: 5),
+            allObjectVibrationRow.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            allObjectVibrationRow.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
         ])
         
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(vibration1RowTapped(_:)))
-        vibration1Row.addGestureRecognizer(tapGestureRecognizer)
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(allObjectVibrationRowTapped(_:)))
+        allObjectVibrationRow.addGestureRecognizer(tapGestureRecognizer)
     }
 
-    private func addVibration2Row() {
-        let vibration2Row = createRow(title: "Selected objects vibration")
-        vibration2Row.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        view.addSubview(vibration2Row)
+    private func addSelectedObjectVibrationRow() {
+        let selectedObjectVibrationRow = createRow(title: "Selected objects vibration")
+        selectedObjectVibrationRow.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        view.addSubview(selectedObjectVibrationRow)
         
-        vibration2Row.translatesAutoresizingMaskIntoConstraints = false
+        selectedObjectVibrationRow.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            vibration2Row.topAnchor.constraint(equalTo: view.subviews[view.subviews.count - 2].bottomAnchor, constant: 5),
-            vibration2Row.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            vibration2Row.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            selectedObjectVibrationRow.topAnchor.constraint(equalTo: view.subviews[view.subviews.count - 2].bottomAnchor, constant: 5),
+            selectedObjectVibrationRow.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            selectedObjectVibrationRow.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
         ])
 
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(vibration2RowTapped(_:)))
-        vibration2Row.addGestureRecognizer(tapGestureRecognizer)
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(selectedObjectVibrationRowTapped(_:)))
+        selectedObjectVibrationRow.addGestureRecognizer(tapGestureRecognizer)
     }
     
     private func addDarkMode() {
@@ -213,7 +210,7 @@ class SettingsViewController: UIViewController {
     }
 
     
-    @objc private func vibration1RowTapped(_ sender: UITapGestureRecognizer) {
+    @objc private func allObjectVibrationRowTapped(_ sender: UITapGestureRecognizer) {
         if let cell = sender.view as? UITableViewCell,
            let switchView = cell.contentView.subviews.first(where: { $0 is UISwitch }) as? UISwitch {
             switchView.setOn(!switchView.isOn, animated: true)
@@ -223,13 +220,14 @@ class SettingsViewController: UIViewController {
     }
 
     
-    @objc private func vibration2RowTapped(_ sender: UITapGestureRecognizer) {
+    @objc private func selectedObjectVibrationRowTapped(_ sender: UITapGestureRecognizer) {
         if let cell = sender.view as? UITableViewCell,
            let switchView = cell.contentView.subviews.first(where: { $0 is UISwitch }) as? UISwitch {
             switchView.setOn(!switchView.isOn, animated: true)
             selected_obj_vibration_mode = switchView.isOn
         }
     }
+    
     
     @objc private func darkModeTapped(_ sender: UITapGestureRecognizer) {
         if let cell = sender.view as? UITableViewCell,
@@ -337,6 +335,7 @@ class SettingsViewController: UIViewController {
         let informationVC = InformationViewController()
         present(informationVC, animated: true, completion: nil)
     }
+    
     
     private func toggleDarkMode(_ isOn: Bool) {
         if isOn {
