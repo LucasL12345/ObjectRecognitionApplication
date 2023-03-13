@@ -7,8 +7,6 @@ class VisionObjectRecognitionViewController: ViewController {
     internal var detectionOverlay: CALayer! = nil
     // Vision parts
     internal var requests = [VNRequest]()
-    
-    var settingsVC: OptionsViewController!
 
     var all_items = ["backpack", "handbag", "bottle", "cup", "knife", "bowl", "laptop", "remote", "cell phone", "book", "vase", "scissors", "toothbrush", "chair", "dog", "cat"]
     static var selected_items:[String] = ["all"]
@@ -83,13 +81,13 @@ class VisionObjectRecognitionViewController: ViewController {
             
             if findObjectButton.currentTitle == "Finding selected objects" {
                 for object in VisionObjectRecognitionViewController.selected_items {
-                    if topLabelObservation.identifier == object && VisionObjectRecognitionViewController.all_obj_vibration_mode {
+                    if topLabelObservation.identifier == object && VisionObjectRecognitionViewController.selected_obj_vibration_mode {
                         AudioServicesPlayAlertSoundWithCompletion(SystemSoundID(kSystemSoundID_Vibrate)) { }
                     }
                 }
             } else {
                 for object in all_items {
-                    if topLabelObservation.identifier == object && VisionObjectRecognitionViewController.selected_obj_vibration_mode {
+                    if topLabelObservation.identifier == object && VisionObjectRecognitionViewController.all_obj_vibration_mode {
                         AudioServicesPlayAlertSoundWithCompletion(SystemSoundID(kSystemSoundID_Vibrate)) { }
                     }
                 }
