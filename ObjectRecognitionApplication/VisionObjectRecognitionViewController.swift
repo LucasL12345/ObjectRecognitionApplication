@@ -8,11 +8,6 @@ class VisionObjectRecognitionViewController: ViewController {
     // Vision parts
     internal var requests = [VNRequest]()
     
-    var settingsVC: OptionsViewController!
-
-    var all_items = ["backpack", "handbag", "bottle", "cup", "knife", "bowl", "laptop", "remote", "cell phone", "book", "vase", "scissors", "toothbrush", "chair", "dog", "cat"]
-    static var selected_items:[String] = ["all"]
-    
     @discardableResult
     func setupVision() -> NSError? {
         // Setup Vision parts
@@ -59,23 +54,9 @@ class VisionObjectRecognitionViewController: ViewController {
             let textLayer = self.createTextSubLayerInBounds(objectBounds,
                                                             identifier: topLabelObservation.identifier,
                                                             confidence: topLabelObservation.confidence)
-            
             shapeLayer.addSublayer(textLayer)
             detectionOverlay.addSublayer(shapeLayer)
             
-            if findObjectButton.currentTitle == "Finding selected objects" {
-                for object in VisionObjectRecognitionViewController.selected_items {
-                    if topLabelObservation.identifier == object {
-                        AudioServicesPlayAlertSoundWithCompletion(SystemSoundID(kSystemSoundID_Vibrate)) { }
-                    }
-                }
-            } else {
-                for object in all_items {
-                    if topLabelObservation.identifier == object {
-                        AudioServicesPlayAlertSoundWithCompletion(SystemSoundID(kSystemSoundID_Vibrate)) { }
-                    }
-                }
-            }
         }
         self.updateLayerGeometry()
         CATransaction.commit()
@@ -174,16 +155,10 @@ class VisionObjectRecognitionViewController: ViewController {
 
     
     @IBAction func button2(_ sender: Any) {
-        if findObjectButton.currentTitle == "Finding selected objects" {
-            findObjectButton.setTitle("Finding all objects", for: .normal)
-        } else {
-            findObjectButton.setTitle("Finding selected objects", for: .normal)
-        }
+        print("pressed")
     }
-    
-    func updateValue(_ value: [String]) {
-        VisionObjectRecognitionViewController.selected_items = value
-    }
+
+ 
 }
     
 

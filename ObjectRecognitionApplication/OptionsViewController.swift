@@ -1,21 +1,12 @@
 import UIKit
 import AVFoundation
 
-class OptionsViewController: UIViewController, AVSpeechSynthesizerDelegate  {
+class OptionsViewController: UIViewController {
 
-    lazy var fontManager = FontManager.shared
-
-    lazy var currentFontSize: CGFloat = {
-        return fontManager.getFontSize()
-    }()
-    
     var buttons: [UIButton] = []
-    var all_items = ["backpack", "handbag", "bottle", "cup", "knife", "bowl", "laptop", "remote", "cell phone", "book", "vase", "scissors", "toothbrush", "chair", "dog", "cat"]
-
+    var items = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p"]
     var buttonColors: [UIColor] = []
-    var selected_items = [String]()
-    var isConfirmationDone = false
-    var visionObjectVC: VisionObjectRecognitionViewController!
+    var selectedItems = ["test", "test"]
     
     let titleLabel: UILabel = {
         let label = UILabel()
@@ -33,75 +24,29 @@ class OptionsViewController: UIViewController, AVSpeechSynthesizerDelegate  {
     
     let synthesizer = AVSpeechSynthesizer()
     
-    let backButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("Back", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .black
-        button.layer.cornerRadius = 10
-        button.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
-    
-    let confirmButton: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = .systemBlue
-        button.layer.borderWidth = 1.0
-        button.layer.borderColor = UIColor.black.cgColor
-        button.layer.cornerRadius = 10
-        button.setTitle("Confirm", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.addTarget(self, action: #selector(confirmButtonTapped), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-
-        return button
-    }()
-
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
         
-        if let selectedItems = UserDefaults.standard.array(forKey: "selectedItems") as? [String] {
-            selected_items = selectedItems
-        }
-        
-        backButton.titleLabel?.font = UIFont.systemFont(ofSize: currentFontSize)
+        let backButton = UIButton()
+        backButton.setTitle("Back", for: .normal)
+        backButton.setTitleColor(.white, for: .normal)
+        backButton.backgroundColor = .black
+        backButton.layer.cornerRadius = 10
+        backButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
+        backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
         backButton.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(backButton)
         
         NSLayoutConstraint.activate([
             backButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
             backButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 20),
-            backButton.widthAnchor.constraint(equalToConstant: (self.view.bounds.width / 2) * 0.85),
+            backButton.widthAnchor.constraint(equalToConstant: 150),
             backButton.heightAnchor.constraint(equalToConstant: 80),
         ])
-    
-        let fontSizeButton = UIButton()
-        fontSizeButton.setTitle("Aa", for: .normal)
-        fontSizeButton.backgroundColor = .white
-        fontSizeButton.layer.borderWidth = 1.0
-        fontSizeButton.layer.borderColor = UIColor.black.cgColor
-        fontSizeButton.layer.cornerRadius = 10
-        fontSizeButton.setTitleColor(.black, for: .normal)
-        fontSizeButton.titleLabel?.font = UIFont.systemFont(ofSize: 30)
-        fontSizeButton.addTarget(self, action: #selector(fontSizeButtonTapped), for: .touchUpInside)
-
-        fontSizeButton.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(fontSizeButton)
-        NSLayoutConstraint.activate([
-            fontSizeButton.leadingAnchor.constraint(equalTo: backButton.trailingAnchor, constant: (self.view.bounds.width / 8) * 0.85),
-            fontSizeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: (self.view.bounds.width / 8) * -0.85),
-            fontSizeButton.centerYAnchor.constraint(equalTo: backButton.centerYAnchor),
-            fontSizeButton.widthAnchor.constraint(equalToConstant: 100),
-            fontSizeButton.heightAnchor.constraint(equalToConstant: 60),
-        ])
-
+        
         navigationItem.titleView = titleLabel
         navigationItem.titleView?.contentMode = .center
-        titleLabel.font = UIFont.systemFont(ofSize: currentFontSize + 5)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
         NSLayoutConstraint.activate([
@@ -119,7 +64,7 @@ class OptionsViewController: UIViewController, AVSpeechSynthesizerDelegate  {
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         
-        let buttonTitles = all_items
+        let buttonTitles = items
         
         // load button colors from user defaults
         if let savedButtonColors = UserDefaults.standard.array(forKey: "buttonColors") as? [Data] {
@@ -133,12 +78,8 @@ class OptionsViewController: UIViewController, AVSpeechSynthesizerDelegate  {
         for i in 0..<buttonTitles.count {
             let button = UIButton()
             button.setTitle(buttonTitles[i], for: .normal)
-            button.backgroundColor = buttonColors[i]
-            if button.backgroundColor != .white {
-                button.setTitleColor(.white, for: .normal)
-            } else {
-                button.setTitleColor(.black, for: .normal)
-            }
+            button.backgroundColor = .white
+            button.setTitleColor(.black, for: .normal)
             button.layer.cornerRadius = 10
             button.layer.borderColor = UIColor.black.cgColor
             button.layer.borderWidth = 1
@@ -147,15 +88,26 @@ class OptionsViewController: UIViewController, AVSpeechSynthesizerDelegate  {
             button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
             buttons.append(button)
             scrollView.addSubview(button)
+            
+            // set button color from array
+            if i < buttonColors.count {
+                button.backgroundColor = buttonColors[i]
+            } else {
+                buttonColors.append(button.backgroundColor ?? .white)
+            }
         }
-
-
-        // Use the font size index to set the initial font sizes
-        for button in buttons {
-            button.titleLabel?.font = UIFont.systemFont(ofSize: currentFontSize)
-        }
-    
-        confirmButton.titleLabel?.font = UIFont.systemFont(ofSize: currentFontSize + 8)
+        
+        let confirmButton = UIButton(type: .system)
+        confirmButton.backgroundColor = .systemBlue
+        confirmButton.layer.borderWidth = 1.0
+        confirmButton.layer.borderColor = UIColor.black.cgColor
+        confirmButton.layer.cornerRadius = 10
+        confirmButton.setTitle("Confirm", for: .normal)
+        confirmButton.setTitleColor(.white, for: .normal)
+        confirmButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
+        confirmButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        confirmButton.translatesAutoresizingMaskIntoConstraints = false
+        confirmButton.addTarget(self, action: #selector(confirmButtonTapped), for: .touchUpInside)
         confirmButton.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(confirmButton)
 
@@ -179,7 +131,6 @@ class OptionsViewController: UIViewController, AVSpeechSynthesizerDelegate  {
             let row = i / numberOfColumns // integer division to determine row number
             let col = i % numberOfColumns // modulus to determine column number
             let button = buttons[i]
-            
             let x = CGFloat(col) * (buttonWidth + 10) + 10 // adding 10 for gap between buttons
             let y = topMargin + CGFloat(row) * (buttonHeight + 10)
             button.frame = CGRect(x: x, y: y, width: buttonWidth, height: buttonHeight)
@@ -189,77 +140,30 @@ class OptionsViewController: UIViewController, AVSpeechSynthesizerDelegate  {
 
     }
 
-    
-    @objc func backButtonTapped() {
-        self.dismiss(animated: true, completion: nil)
-        
-    }
-    
 
-    @objc func fontSizeButtonTapped() {
-        let newFontSize = fontManager.increaseFontSize()
-        backButton.titleLabel?.font = UIFont.systemFont(ofSize: newFontSize)
-        confirmButton.titleLabel?.font = UIFont.systemFont(ofSize: newFontSize + 8)
-        titleLabel.font = UIFont.systemFont(ofSize: newFontSize + 5)
-        
-        for button in buttons {
-            button.titleLabel?.font = UIFont.systemFont(ofSize: newFontSize)
-        }
-    }
 
     
     @IBAction func buttonTapped(_ button: UIButton) {
-        let title = all_items[button.tag]
-        if button.backgroundColor == .white {
-            button.backgroundColor = .systemBlue
-            button.setTitleColor(.white, for: .normal)
-            if !selected_items.contains(title) {
-                selected_items.append(title)
-            }
-        } else {
-            button.backgroundColor = .white
-            button.setTitleColor(.black, for: .normal)
-            if let index = selected_items.firstIndex(of: title) {
-                selected_items.remove(at: index)
-            }
-        }
-
+        button.backgroundColor = button.backgroundColor == .white ? .systemBlue : .white
         buttonColors[button.tag] = button.backgroundColor ?? .white
+        
         // save button colors to user defaults
         let savedButtonColors = buttonColors.map { try? NSKeyedArchiver.archivedData(withRootObject: $0, requiringSecureCoding: false) }
         UserDefaults.standard.set(savedButtonColors, forKey: "buttonColors")
-        
-        UserDefaults.standard.set(selected_items, forKey: "selectedItems")
-        
-        guard let presentingVC = presentingViewController as? VisionObjectRecognitionViewController else {
-            fatalError("Unable to get presenting view controller")
-        }
-        visionObjectVC = presentingVC
-        visionObjectVC.updateValue(selected_items)
-
     }
-
 
     
-    @objc func confirmButtonTapped() {
-        if isConfirmationDone {
-            return
-        }
-        
-        let utterance = AVSpeechUtterance(string: "You have selected: \(selected_items.joined(separator: ", "))")
-        utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
-            
-        synthesizer.delegate = self
-        synthesizer.speak(utterance)
-        
-        isConfirmationDone = true
-    }
-
-
-    func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
+    @objc func backButtonTapped() {
         self.dismiss(animated: true, completion: nil)
+//        let VC = ViewController()
+//        present(VC, animated: true, completion: nil)
+        
     }
-
-
+    
+    @objc func confirmButtonTapped() {
+        let utterance = AVSpeechUtterance(string: "You have selected the following items: \(selectedItems.joined(separator: ", "))")
+        utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+        synthesizer.speak(utterance)
+    }
         
 }
