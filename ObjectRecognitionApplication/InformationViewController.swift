@@ -30,7 +30,7 @@ class InformationViewController: UIViewController {
     
     lazy var paragraphLabel: UILabel = {
         let label = UILabel()
-        label.text = "This app is designed"
+        label.text = "This app is designed to help visually impaired people locate objects. There are three main buttons. Firstly, a large button at the bottom with two modes - finding all objects and finding selected objects. Finding all objects mode will read out any objects the app can detect through the device's camera, and finding selected objects mode will only read out any objects found that are selected in the Choose Items page. To get to this page you can press the button at the top right of the screen. In this page, there is a list of objects that you can select, and then press either the Confirm button at the bottom or the Back button at the top left to go back to the main page. The only difference is that the Confirm button will read out your selected objects whereas the back button wont. Finally, on the main page, there is a Settings button at the top left. From this page you can turn the vibration on or off for either 'finding' mode, turn dark mode on or off, and go to the app information page (this page). Every page except the main page, have large back buttons located in the top left, and a text resizing option located in the top right."
         label.textAlignment = .center
         label.numberOfLines = 0
         label.font = UIFont.systemFont(ofSize: currentFontSize)

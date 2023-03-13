@@ -59,7 +59,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         button.backgroundColor = button.backgroundColor?.withAlphaComponent(0.75)
         button.layer.borderWidth = 1.0
         button.layer.borderColor = UIColor.black.cgColor
-        button.setTitle("App Info", for: .normal)
+        button.setTitle("Settings", for: .normal)
         button.setTitleColor(.black, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
         button.titleLabel?.textAlignment = .center
