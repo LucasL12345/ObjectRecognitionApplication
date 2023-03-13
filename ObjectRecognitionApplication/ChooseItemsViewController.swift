@@ -1,7 +1,7 @@
 import UIKit
 import AVFoundation
 
-class OptionsViewController: UIViewController, AVSpeechSynthesizerDelegate  {
+class ChooseItemsViewController: UIViewController, AVSpeechSynthesizerDelegate  {
 
     lazy var fontManager = FontManager.shared
 

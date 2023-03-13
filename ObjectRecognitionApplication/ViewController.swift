@@ -35,7 +35,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     }()
     
     
-    let optionButton: UIButton = {
+    let chooseItemsButton: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = .white
         button.backgroundColor = button.backgroundColor?.withAlphaComponent(0.75)
@@ -48,7 +48,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         button.titleLabel?.textAlignment = .center
         button.titleLabel?.numberOfLines = 0
         button.titleLabel?.lineBreakMode = .byWordWrapping
-        button.addTarget(self, action: #selector(ViewController.showOptions), for: .touchUpInside)
+        button.addTarget(self, action: #selector(ViewController.showChooseItems), for: .touchUpInside)
 
         return button
     }()
@@ -77,8 +77,8 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         
         view.addSubview(settingsButton)
         settingsButton.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(optionButton)
-        optionButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(chooseItemsButton)
+        chooseItemsButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(findObjectButton)
         findObjectButton.translatesAutoresizingMaskIntoConstraints = false
 
@@ -88,10 +88,10 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             settingsButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
             settingsButton.heightAnchor.constraint(equalToConstant: 90),
 
-            optionButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
-            optionButton.leadingAnchor.constraint(equalTo: settingsButton.trailingAnchor, constant: 10),
-            optionButton.heightAnchor.constraint(equalToConstant: 90),
-            optionButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+            chooseItemsButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
+            chooseItemsButton.leadingAnchor.constraint(equalTo: settingsButton.trailingAnchor, constant: 10),
+            chooseItemsButton.heightAnchor.constraint(equalToConstant: 90),
+            chooseItemsButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
 
             findObjectButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
             findObjectButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
@@ -101,9 +101,9 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
 
     }
     
-    @objc func showOptions() {
-        let optionsVC = OptionsViewController()
-        present(optionsVC, animated: true, completion: nil)
+    @objc func showChooseItems() {
+        let chooseItemsVC = ChooseItemsViewController()
+        present(chooseItemsVC, animated: true, completion: nil)
     }
     
     @objc func showSettings() {
