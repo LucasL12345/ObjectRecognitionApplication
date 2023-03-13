@@ -48,7 +48,6 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         button.titleLabel?.textAlignment = .center
         button.titleLabel?.numberOfLines = 0
         button.titleLabel?.lineBreakMode = .byWordWrapping
-        button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(ViewController.showOptions), for: .touchUpInside)
 
         return button
@@ -67,7 +66,6 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         button.titleLabel?.numberOfLines = 0
         button.titleLabel?.lineBreakMode = .byWordWrapping
         button.layer.cornerRadius = 10
-        button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(ViewController.showSettings), for: .touchUpInside)
         return button
     }()
@@ -169,12 +167,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     func startCaptureSession() {
         session.startRunning()
     }
-    
-    // Clean up capture setup
-    func teardownAVCapture() {
-        previewLayer.removeFromSuperlayer()
-        previewLayer = nil
-    }
+
     
     func captureOutput(_ captureOutput: AVCaptureOutput, didDrop didDropSampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         // print("frame dropped")
