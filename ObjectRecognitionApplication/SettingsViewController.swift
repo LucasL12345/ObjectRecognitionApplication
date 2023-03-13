@@ -9,6 +9,11 @@ class SettingsViewController: UIViewController {
     lazy var currentFontSize: CGFloat = {
         return fontManager.getFontSize()
     }()
+    
+    let lightBackgroundColor = UIColor.white
+    let darkBackgroundColor = UIColor.black
+    let lightTextColor = UIColor.black
+    let darkTextColor = UIColor.white
 
     let backButton = UIButton()
     var all_obj_vibration_mode = UserDefaults.standard.bool(forKey: "all_obj_vibration_mode")
@@ -33,7 +38,7 @@ class SettingsViewController: UIViewController {
         super.viewDidLoad()
         
         initializeVariables()
-        view.backgroundColor = UIColor.white
+        toggleDarkMode(dark_mode)
 
         all_obj_vibration_mode = UserDefaults.standard.bool(forKey: "all_obj_vibration_mode")
         selected_obj_vibration_mode = UserDefaults.standard.bool(forKey: "selected_obj_vibration_mode")
@@ -59,12 +64,17 @@ class SettingsViewController: UIViewController {
 
     
         backButton.setTitle("Back", for: .normal)
-            backButton.setTitleColor(.white, for: .normal)
-            backButton.backgroundColor = .black
-            backButton.layer.cornerRadius = 10
-            backButton.titleLabel?.font = UIFont.systemFont(ofSize: currentFontSize)
-            backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
-            backButton.translatesAutoresizingMaskIntoConstraints = false
+        if dark_mode {
+            backButton.backgroundColor = lightBackgroundColor
+            backButton.setTitleColor(darkBackgroundColor, for: .normal)
+        } else {
+            backButton.backgroundColor = darkBackgroundColor
+            backButton.setTitleColor(lightBackgroundColor, for: .normal)
+        }
+        backButton.layer.cornerRadius = 10
+        backButton.titleLabel?.font = UIFont.systemFont(ofSize: currentFontSize)
+        backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        backButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(backButton)
 
         NSLayoutConstraint.activate([
@@ -76,11 +86,17 @@ class SettingsViewController: UIViewController {
         
         let fontSizeButton = UIButton()
         fontSizeButton.setTitle("Aa", for: .normal)
-        fontSizeButton.backgroundColor = .white
         fontSizeButton.layer.borderWidth = 1.0
-        fontSizeButton.layer.borderColor = UIColor.black.cgColor
+        if dark_mode {
+            fontSizeButton.backgroundColor = darkBackgroundColor
+            fontSizeButton.setTitleColor(lightBackgroundColor, for: .normal)
+            fontSizeButton.layer.borderColor = lightBackgroundColor.cgColor
+        } else {
+            fontSizeButton.backgroundColor = lightBackgroundColor
+            fontSizeButton.setTitleColor(darkBackgroundColor, for: .normal)
+            fontSizeButton.layer.borderColor = darkBackgroundColor.cgColor
+        }
         fontSizeButton.layer.cornerRadius = 10
-        fontSizeButton.setTitleColor(.black, for: .normal)
         fontSizeButton.titleLabel?.font = UIFont.systemFont(ofSize: 30)
         fontSizeButton.addTarget(self, action: #selector(fontSizeButtonTapped), for: .touchUpInside)
 
@@ -104,16 +120,18 @@ class SettingsViewController: UIViewController {
     
     private func addInformationRow() {
         let informationRow = UITableViewCell(style: .default, reuseIdentifier: nil)
-        informationRow.backgroundColor = UIColor.white
+        
+        informationRow.backgroundColor = dark_mode ? darkBackgroundColor : lightBackgroundColor
         informationRow.textLabel?.text = "Information"
+        informationRow.textLabel?.textColor = dark_mode ? darkTextColor : lightTextColor
+        informationRow.layer.borderWidth = 1.0
+        informationRow.layer.borderColor = dark_mode ? lightBackgroundColor.cgColor : UIColor.gray.cgColor
         informationRow.textLabel?.font = UIFont.systemFont(ofSize: currentFontSize)
         informationRow.selectionStyle = .none
         informationRow.separatorInset = UIEdgeInsets(top: 0, left: 7, bottom: 0, right: 15)
         informationRow.layer.cornerRadius = 10
         informationRow.clipsToBounds = true
         informationRow.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showInformation)))
-        informationRow.layer.borderWidth = 1.0
-        informationRow.layer.borderColor = UIColor.gray.cgColor
         view.addSubview(informationRow)
 
         informationRow.translatesAutoresizingMaskIntoConstraints = false
@@ -218,6 +236,8 @@ class SettingsViewController: UIViewController {
            let switchView = cell.contentView.subviews.first(where: { $0 is UISwitch }) as? UISwitch {
             switchView.setOn(!switchView.isOn, animated: true)
             dark_mode = switchView.isOn
+            UserDefaults.standard.set(dark_mode, forKey: "dark_mode")
+            toggleDarkMode(dark_mode)
         }
     }
 
@@ -232,6 +252,7 @@ class SettingsViewController: UIViewController {
         } else if sender.tag == 2 {
             dark_mode.toggle()
             UserDefaults.standard.set(dark_mode, forKey: "dark_mode")
+            toggleDarkMode(dark_mode)
         }
         
         guard let presentingVC = presentingViewController as? VisionObjectRecognitionViewController else {
@@ -239,22 +260,22 @@ class SettingsViewController: UIViewController {
         }
         visionObjectVC = presentingVC
         visionObjectVC.updateAllObjectVibrationMode(all_obj_vibration_mode)
-        print(sender.tag)
     }
 
 
     // Helper method to create a row with a given title
     private func createRow(title: String) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-        cell.backgroundColor = UIColor.white
+        cell.backgroundColor = dark_mode ? darkBackgroundColor : lightBackgroundColor
         cell.textLabel?.text = title
+        cell.textLabel?.textColor = dark_mode ? darkTextColor : lightTextColor
+        cell.layer.borderWidth = 1.0
+        cell.layer.borderColor = dark_mode ? lightBackgroundColor.cgColor : UIColor.gray.cgColor
         cell.textLabel?.font = UIFont.systemFont(ofSize: currentFontSize)
         cell.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
         cell.selectionStyle = .none
         cell.layer.cornerRadius = 10
         cell.clipsToBounds = true
-        cell.layer.borderWidth = 1.0
-        cell.layer.borderColor = UIColor.gray.cgColor
 
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(switchToggled(_:)))
         cell.addGestureRecognizer(tapGestureRecognizer)
@@ -316,4 +337,17 @@ class SettingsViewController: UIViewController {
         let informationVC = InformationViewController()
         present(informationVC, animated: true, completion: nil)
     }
+    
+    private func toggleDarkMode(_ isOn: Bool) {
+        if isOn {
+            view.backgroundColor = darkBackgroundColor
+            
+            // set other elements for dark mode
+        } else {
+            view.backgroundColor = lightBackgroundColor
+            
+            // set other elements for light mode
+        }
+    }
+
 }
