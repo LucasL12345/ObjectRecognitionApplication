@@ -13,6 +13,7 @@ class OptionsViewController: UIViewController, AVSpeechSynthesizerDelegate  {
     var all_items = ["backpack", "handbag", "bottle", "cup", "knife", "bowl", "laptop", "remote", "cell phone", "book", "vase", "scissors", "toothbrush", "chair", "dog", "cat"]
 
     var buttonColors: [UIColor] = []
+
     var selected_items = [String]()
     var isConfirmationDone = false
     var visionObjectVC: VisionObjectRecognitionViewController!

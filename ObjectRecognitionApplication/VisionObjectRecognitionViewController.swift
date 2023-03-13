@@ -13,6 +13,24 @@ class VisionObjectRecognitionViewController: ViewController {
     var all_items = ["backpack", "handbag", "bottle", "cup", "knife", "bowl", "laptop", "remote", "cell phone", "book", "vase", "scissors", "toothbrush", "chair", "dog", "cat"]
     static var selected_items:[String] = ["all"]
     
+    static var all_obj_vibration_mode: Bool {
+        get {
+            return UserDefaults.standard.bool(forKey: "all_obj_vibration_mode")
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: "all_obj_vibration_mode")
+        }
+    }
+    
+    static var selected_obj_vibration_mode: Bool {
+        get {
+            return UserDefaults.standard.bool(forKey: "selected_obj_vibration_mode")
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: "selected_obj_vibration_mode")
+        }
+    }
+    
     @discardableResult
     func setupVision() -> NSError? {
         // Setup Vision parts
@@ -179,11 +197,24 @@ class VisionObjectRecognitionViewController: ViewController {
         } else {
             findObjectButton.setTitle("Finding selected objects", for: .normal)
         }
+        print(VisionObjectRecognitionViewController.all_obj_vibration_mode)
+        print(VisionObjectRecognitionViewController.selected_obj_vibration_mode)
     }
     
     func updateValue(_ value: [String]) {
         VisionObjectRecognitionViewController.selected_items = value
     }
+    
+    func updateAllObjectVibrationMode(_ value: Bool) {
+        VisionObjectRecognitionViewController.all_obj_vibration_mode = value
+        UserDefaults.standard.set(value, forKey: "all_obj_vibration_mode")
+    }
+
+    func updateSelectedObjectVibrationMode(_ value: Bool) {
+        VisionObjectRecognitionViewController.selected_obj_vibration_mode = value
+        UserDefaults.standard.set(value, forKey: "selected_obj_vibration_mode")
+    }
+    
 }
     
 

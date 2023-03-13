@@ -2,6 +2,8 @@ import UIKit
 
 class SettingsViewController: UIViewController {
     
+    var visionObjectVC: VisionObjectRecognitionViewController!
+    
     lazy var fontManager = FontManager.shared
 
     lazy var currentFontSize: CGFloat = {
@@ -199,6 +201,7 @@ class SettingsViewController: UIViewController {
             switchView.setOn(!switchView.isOn, animated: true)
             all_obj_vibration_mode = switchView.isOn
         }
+        
     }
 
     
@@ -231,6 +234,11 @@ class SettingsViewController: UIViewController {
             UserDefaults.standard.set(dark_mode, forKey: "dark_mode")
         }
         
+        guard let presentingVC = presentingViewController as? VisionObjectRecognitionViewController else {
+            fatalError("Unable to get presenting view controller")
+        }
+        visionObjectVC = presentingVC
+        visionObjectVC.updateAllObjectVibrationMode(all_obj_vibration_mode)
         print(sender.tag)
     }
 
