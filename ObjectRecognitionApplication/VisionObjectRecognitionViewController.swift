@@ -29,6 +29,15 @@ class VisionObjectRecognitionViewController: ViewController {
         }
     }
     
+    private let speechSynthesizer = AVSpeechSynthesizer()
+    private var lastSpokenText: String?
+    private var isSpeaking = false
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        speechSynthesizer.delegate = self
+    }
+    
     @discardableResult
     func setupVision() -> NSError? {
         // Setup Vision parts
@@ -83,19 +92,28 @@ class VisionObjectRecognitionViewController: ViewController {
                 for object in VisionObjectRecognitionViewController.selected_items {
                     if topLabelObservation.identifier == object && VisionObjectRecognitionViewController.selected_obj_vibration_mode {
                         AudioServicesPlayAlertSoundWithCompletion(SystemSoundID(kSystemSoundID_Vibrate)) { }
+                        let identifier = topLabelObservation.identifier
+                        speakDetectedObject(identifier: identifier)
                     }
                 }
             } else {
-                for object in all_items {
-                    if topLabelObservation.identifier == object && VisionObjectRecognitionViewController.all_obj_vibration_mode {
-                        AudioServicesPlayAlertSoundWithCompletion(SystemSoundID(kSystemSoundID_Vibrate)) { }
-                    }
+                //                for object in all_items {
+                //                    if topLabelObservation.identifier == object && VisionObjectRecognitionViewController.all_obj_vibration_mode {
+                //                        AudioServicesPlayAlertSoundWithCompletion(SystemSoundID(kSystemSoundID_Vibrate)) { }
+                //                    }
+                //                }
+                
+                AudioServicesPlayAlertSoundWithCompletion(SystemSoundID(kSystemSoundID_Vibrate)) { }
+                let identifier = topLabelObservation.identifier
+                speakDetectedObject(identifier: identifier)
                 }
             }
-        }
+        
         self.updateLayerGeometry()
         CATransaction.commit()
     }
+    
+
     
     
     override func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
@@ -211,7 +229,26 @@ class VisionObjectRecognitionViewController: ViewController {
         UserDefaults.standard.set(value, forKey: "selected_obj_vibration_mode")
     }
     
+    func speakDetectedObject(identifier: String) {
+        // Check if the new identifier is different from the last spoken text
+        if lastSpokenText != identifier && !isSpeaking {
+            // Speak the new identifier
+            let speechUtterance = AVSpeechUtterance(string: identifier)
+            speechUtterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+            speechSynthesizer.speak(speechUtterance)
+            
+            // Update the last spoken text
+            lastSpokenText = identifier
+            isSpeaking = true
+        }
+    }
+    
 }
     
-
+extension VisionObjectRecognitionViewController: AVSpeechSynthesizerDelegate {
+    
+    func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
+        isSpeaking = false
+    }
+}
 
