@@ -30,7 +30,7 @@ class InformationViewController: UIViewController {
     
     lazy var paragraphLabel: UILabel = {
         let label = UILabel()
-        label.text = "This app is designed"
+        label.text = "This app is designed to help visually impaired people locate items. There are four pages in the app, centered around the main view page. On this page, there are three main buttons. A large button at the bottom with two modes - finding all objects and finding selected objects. Finding all objects mode will read out any objects the app can detect through the device's camera, and finding selected objects mode will only read out any objects found that are selected in the Choose Items page. The next button is located on the top right of the screen. This will take you to the Choose Items page. In this page, there is a list of objects that you can select, and then press either the Confirm button at the bottom or the Back button at the top left to go back to the main page. Finally, the third button on the main page is at the top left of the screen. This will take you to the Settings page. From this page you can turn the vibration on or off for both the finding object modes, turn dark mode on or off, and go to the app information page (this page). Every page except the main page, has large back buttons located in the top left, and a text resizing option located in the top right."
         label.textAlignment = .center
         label.numberOfLines = 0
         label.font = UIFont.systemFont(ofSize: currentFontSize)
@@ -58,12 +58,13 @@ class InformationViewController: UIViewController {
         return scrollView
     }()
 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
         
         backButton.titleLabel?.font = UIFont.systemFont(ofSize: currentFontSize)
-        titleLabel.font = UIFont.boldSystemFont(ofSize: currentFontSize)
+        titleLabel.font = UIFont.boldSystemFont(ofSize: currentFontSize + 5)
         paragraphLabel.font = UIFont.systemFont(ofSize: currentFontSize)
         
         if let index = UserDefaults.standard.object(forKey: "currentFontSizeIndex") as? Int {
@@ -106,17 +107,16 @@ class InformationViewController: UIViewController {
         scrollView.contentSize = CGSize(width: self.view.frame.size.width, height: paragraphLabel.frame.origin.y + paragraphLabel.frame.size.height + 20)
     }
 
-        
-        
 
     @objc func backButtonTapped() {
         self.dismiss(animated: true, completion: nil)
     }
 
+    
     @objc func fontSizeButtonTapped() {
         let newFontSize = fontManager.increaseFontSize()
         backButton.titleLabel?.font = UIFont.systemFont(ofSize: newFontSize)
-        titleLabel.font = UIFont.boldSystemFont(ofSize: newFontSize)
+        titleLabel.font = UIFont.boldSystemFont(ofSize: newFontSize + 5)
         paragraphLabel.font = UIFont.systemFont(ofSize: newFontSize)
     }
 

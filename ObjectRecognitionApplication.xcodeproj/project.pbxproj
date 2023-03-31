@@ -11,10 +11,10 @@
 		A0C3868E29BE1D1400A9566E /* FontManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C3868D29BE1D1400A9566E /* FontManager.swift */; };
 		A0CDBC5F29A1A01D009CE398 /* ObjectRecognitionApplicationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CDBC5E29A1A01D009CE398 /* ObjectRecognitionApplicationTests.swift */; };
 		A0CDBC9C29A2F162009CE398 /* InformationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CDBC9B29A2F162009CE398 /* InformationViewController.swift */; };
-		A0CDBC9E29A2F19A009CE398 /* OptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CDBC9D29A2F19A009CE398 /* OptionsViewController.swift */; };
+		A0CDBC9E29A2F19A009CE398 /* ChooseItemsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CDBC9D29A2F19A009CE398 /* ChooseItemsViewController.swift */; };
 		FAB417F62099308400494E9C /* VisionObjectRecognitionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB417F52099308400494E9C /* VisionObjectRecognitionViewController.swift */; };
 		FAD5009F1ED668B60074D713 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD5009E1ED668B60074D713 /* AppDelegate.swift */; };
-		FAD500A11ED668B60074D713 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD500A01ED668B60074D713 /* ViewController.swift */; };
+		FAD500A11ED668B60074D713 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD500A01ED668B60074D713 /* MainViewController.swift */; };
 		FAD500A41ED668B60074D713 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAD500A21ED668B60074D713 /* Main.storyboard */; };
 		FAD500A61ED668B60074D713 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FAD500A51ED668B60074D713 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
@@ -36,10 +36,10 @@
 		A0CDBC5C29A1A01D009CE398 /* ObjectRecognitionApplicationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ObjectRecognitionApplicationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0CDBC5E29A1A01D009CE398 /* ObjectRecognitionApplicationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectRecognitionApplicationTests.swift; sourceTree = "<group>"; };
 		A0CDBC9B29A2F162009CE398 /* InformationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformationViewController.swift; sourceTree = "<group>"; };
-		A0CDBC9D29A2F19A009CE398 /* OptionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsViewController.swift; sourceTree = "<group>"; };
+		A0CDBC9D29A2F19A009CE398 /* ChooseItemsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseItemsViewController.swift; sourceTree = "<group>"; };
 		FAB417F52099308400494E9C /* VisionObjectRecognitionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VisionObjectRecognitionViewController.swift; sourceTree = "<group>"; };
 		FAD5009E1ED668B60074D713 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		FAD500A01ED668B60074D713 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		FAD500A01ED668B60074D713 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		FAD500A31ED668B60074D713 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		FAD500A51ED668B60074D713 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FAD500AA1ED668B60074D713 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -85,11 +85,11 @@
 			isa = PBXGroup;
 			children = (
 				FAD5009E1ED668B60074D713 /* AppDelegate.swift */,
-				FAD500A01ED668B60074D713 /* ViewController.swift */,
+				FAD500A01ED668B60074D713 /* MainViewController.swift */,
 				FAB417F52099308400494E9C /* VisionObjectRecognitionViewController.swift */,
 				A0C3868B29B8F62900A9566E /* SettingsViewController.swift */,
 				A0CDBC9B29A2F162009CE398 /* InformationViewController.swift */,
-				A0CDBC9D29A2F19A009CE398 /* OptionsViewController.swift */,
+				A0CDBC9D29A2F19A009CE398 /* ChooseItemsViewController.swift */,
 				A0C3868D29BE1D1400A9566E /* FontManager.swift */,
 				FAD500A21ED668B60074D713 /* Main.storyboard */,
 				FAD500A51ED668B60074D713 /* Assets.xcassets */,
@@ -211,11 +211,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				FAB417F62099308400494E9C /* VisionObjectRecognitionViewController.swift in Sources */,
-				FAD500A11ED668B60074D713 /* ViewController.swift in Sources */,
+				FAD500A11ED668B60074D713 /* MainViewController.swift in Sources */,
 				A0C3868E29BE1D1400A9566E /* FontManager.swift in Sources */,
 				FAD5009F1ED668B60074D713 /* AppDelegate.swift in Sources */,
 				A0CDBC9C29A2F162009CE398 /* InformationViewController.swift in Sources */,
-				A0CDBC9E29A2F19A009CE398 /* OptionsViewController.swift in Sources */,
+				A0CDBC9E29A2F19A009CE398 /* ChooseItemsViewController.swift in Sources */,
 				A0C3868C29B8F62900A9566E /* SettingsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

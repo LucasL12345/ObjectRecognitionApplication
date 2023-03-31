@@ -2,7 +2,7 @@ import UIKit
 import AVFoundation
 import Vision
 
-class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
+class MainViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
     
     var bufferSize: CGSize = .zero
     var rootLayer: CALayer! = nil
@@ -12,11 +12,6 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     internal let videoDataOutput = AVCaptureVideoDataOutput()
     internal let videoDataOutputQueue = DispatchQueue(label: "VideoDataOutput", qos: .userInitiated, attributes: [], autoreleaseFrequency: .workItem)
     
-    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        // to be implemented in the subclass
-    }
-    
-    
     let findObjectButton: UIButton = {
             let button = UIButton(type: .system)
         button.backgroundColor = .white
@@ -25,14 +20,16 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         button.layer.borderColor = UIColor.black.cgColor
         button.layer.cornerRadius = 10
         button.setTitle("Finding all objects", for: .normal)
-        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
+        button.titleLabel?.textAlignment = .center
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 34)
+        button.titleLabel?.numberOfLines = 0
+        button.titleLabel?.lineBreakMode = .byWordWrapping
         button.setTitleColor(.black, for: .normal)
-        button.addTarget(self, action: #selector(VisionObjectRecognitionViewController.button2), for: .touchUpInside)
+        button.addTarget(self, action: #selector(VisionObjectRecognitionViewController.findingObjectsButton(_:)), for: .touchUpInside)
         return button
     }()
     
-    
-    let optionButton: UIButton = {
+    let chooseItemsButton: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = .white
         button.backgroundColor = button.backgroundColor?.withAlphaComponent(0.75)
@@ -42,14 +39,10 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         button.setTitleColor(.black, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
         button.layer.cornerRadius = 10
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(ViewController.showOptions), for: .touchUpInside)
-        if #available(iOS 13.0, *) {
-            button.setImage(UIImage(systemName: "chevron.right"), for: .normal)
-        } else {
-            button.setImage(UIImage(named: "chevron.right"), for: .normal)
-        }
-        button.semanticContentAttribute = .forceRightToLeft
+        button.titleLabel?.textAlignment = .center
+        button.titleLabel?.numberOfLines = 0
+        button.titleLabel?.lineBreakMode = .byWordWrapping
+        button.addTarget(self, action: #selector(MainViewController.showChooseItems), for: .touchUpInside)
 
         return button
     }()
@@ -60,12 +53,14 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         button.backgroundColor = button.backgroundColor?.withAlphaComponent(0.75)
         button.layer.borderWidth = 1.0
         button.layer.borderColor = UIColor.black.cgColor
-        button.setTitle("App Info", for: .normal)
+        button.setTitle("Settings", for: .normal)
         button.setTitleColor(.black, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
+        button.titleLabel?.textAlignment = .center
+        button.titleLabel?.numberOfLines = 0
+        button.titleLabel?.lineBreakMode = .byWordWrapping
         button.layer.cornerRadius = 10
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(ViewController.showSettings), for: .touchUpInside)
+        button.addTarget(self, action: #selector(MainViewController.showSettings), for: .touchUpInside)
         return button
     }()
     
@@ -76,8 +71,8 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         
         view.addSubview(settingsButton)
         settingsButton.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(optionButton)
-        optionButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(chooseItemsButton)
+        chooseItemsButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(findObjectButton)
         findObjectButton.translatesAutoresizingMaskIntoConstraints = false
 
@@ -87,12 +82,10 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             settingsButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
             settingsButton.heightAnchor.constraint(equalToConstant: 90),
 
-//            optionButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 2/3),
-            optionButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
-            optionButton.leadingAnchor.constraint(equalTo: settingsButton.trailingAnchor, constant: 10),
-            optionButton.heightAnchor.constraint(equalToConstant: 90),
-            optionButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-
+            chooseItemsButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
+            chooseItemsButton.leadingAnchor.constraint(equalTo: settingsButton.trailingAnchor, constant: 10),
+            chooseItemsButton.heightAnchor.constraint(equalToConstant: 90),
+            chooseItemsButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
 
             findObjectButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
             findObjectButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
@@ -102,9 +95,13 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
 
     }
     
-    @objc func showOptions() {
-        let optionsVC = OptionsViewController()
-        present(optionsVC, animated: true, completion: nil)
+    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+        // to be implemented in the subclass
+    }
+    
+    @objc func showChooseItems() {
+        let chooseItemsVC = ChooseItemsViewController()
+        present(chooseItemsVC, animated: true, completion: nil)
     }
     
     @objc func showSettings() {
@@ -165,19 +162,14 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         rootLayer.addSublayer(previewLayer)
     }
     
+    
     func startCaptureSession() {
         session.startRunning()
     }
-    
-    // Clean up capture setup
-    func teardownAVCapture() {
-        previewLayer.removeFromSuperlayer()
-        previewLayer = nil
-    }
+
     
     func captureOutput(_ captureOutput: AVCaptureOutput, didDrop didDropSampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         // print("frame dropped")
     }
-    
     
 }

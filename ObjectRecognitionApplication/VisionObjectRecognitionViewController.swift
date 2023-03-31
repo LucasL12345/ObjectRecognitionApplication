@@ -2,23 +2,50 @@ import UIKit
 import AVFoundation
 import Vision
 
-class VisionObjectRecognitionViewController: ViewController {
+class VisionObjectRecognitionViewController: MainViewController {
     
     internal var detectionOverlay: CALayer! = nil
     // Vision parts
     internal var requests = [VNRequest]()
-    
-    var settingsVC: OptionsViewController!
 
+    lazy var finding_all_obj_mode = findObjectButton.currentTitle == "Finding selected objects" ? false : true
     var all_items = ["backpack", "handbag", "bottle", "cup", "knife", "bowl", "laptop", "remote", "cell phone", "book", "vase", "scissors", "toothbrush", "chair", "dog", "cat"]
     static var selected_items:[String] = ["all"]
+    
+    static var all_obj_vibration_mode: Bool {
+        get {
+            return UserDefaults.standard.bool(forKey: "all_obj_vibration_mode")
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: "all_obj_vibration_mode")
+        }
+    }
+    
+    static var selected_obj_vibration_mode: Bool {
+        get {
+            return UserDefaults.standard.bool(forKey: "selected_obj_vibration_mode")
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: "selected_obj_vibration_mode")
+        }
+    }
+    
+    private let speechSynthesizer = AVSpeechSynthesizer()
+    private var lastSpokenText: String?
+    private var isSpeaking = false
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        speechSynthesizer.delegate = self
+    }
+    
     
     @discardableResult
     func setupVision() -> NSError? {
         // Setup Vision parts
         let error: NSError! = nil
         
-        guard let modelURL = Bundle.main.url(forResource: "(TODO: Model)", withExtension: "mlmodelc") else {
+        guard let modelURL = Bundle.main.url(forResource: "YOLOv3", withExtension: "mlmodelc") else {
             return NSError(domain: "VisionObjectRecognitionViewController", code: -1, userInfo: [NSLocalizedDescriptionKey: "Model file is missing"])
         }
         do {
@@ -63,24 +90,26 @@ class VisionObjectRecognitionViewController: ViewController {
             shapeLayer.addSublayer(textLayer)
             detectionOverlay.addSublayer(shapeLayer)
             
-            if findObjectButton.currentTitle == "Finding selected items" {
-                for object in VisionObjectRecognitionViewController.selected_items {
-                    if topLabelObservation.identifier == object {
+            let identifier = topLabelObservation.identifier
+            if finding_all_obj_mode == false {
+                if VisionObjectRecognitionViewController.selected_items.contains(identifier) {
+                    if VisionObjectRecognitionViewController.selected_obj_vibration_mode {
                         AudioServicesPlayAlertSoundWithCompletion(SystemSoundID(kSystemSoundID_Vibrate)) { }
                     }
+                    speakDetectedObject(identifier: identifier)
                 }
             } else {
-                for object in all_items {
-                    if topLabelObservation.identifier == object {
-                        AudioServicesPlayAlertSoundWithCompletion(SystemSoundID(kSystemSoundID_Vibrate)) { }
-                    }
+                if VisionObjectRecognitionViewController.all_obj_vibration_mode {
+                    AudioServicesPlayAlertSoundWithCompletion(SystemSoundID(kSystemSoundID_Vibrate)) { }
                 }
+                speakDetectedObject(identifier: identifier)
             }
         }
+        
         self.updateLayerGeometry()
         CATransaction.commit()
     }
-    
+
     
     override func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
@@ -173,24 +202,49 @@ class VisionObjectRecognitionViewController: ViewController {
     }
 
     
-    @IBAction func button2(_ sender: Any) {
-        
-        if findObjectButton.currentTitle == "Finding selected items" {
-            findObjectButton.setTitle("Finding all items", for: .normal)
+    @IBAction func findingObjectsButton(_ sender: Any) {
+        if finding_all_obj_mode == false {
+            findObjectButton.setTitle("Finding all objects", for: .normal)
+            finding_all_obj_mode = true
         } else {
-            findObjectButton.setTitle("Finding selected items", for: .normal)
+            findObjectButton.setTitle("Finding selected objects", for: .normal)
+            finding_all_obj_mode = false
         }
-        print(VisionObjectRecognitionViewController.selected_items)
-
     }
     
+    
     func updateValue(_ value: [String]) {
-        print(value)
         VisionObjectRecognitionViewController.selected_items = value
     }
+    
+    
+    func updateAllObjectVibrationMode(_ value: Bool) {
+        VisionObjectRecognitionViewController.all_obj_vibration_mode = value
+        UserDefaults.standard.set(value, forKey: "all_obj_vibration_mode")
+    }
+    
 
- 
+    func updateSelectedObjectVibrationMode(_ value: Bool) {
+        VisionObjectRecognitionViewController.selected_obj_vibration_mode = value
+        UserDefaults.standard.set(value, forKey: "selected_obj_vibration_mode")
+    }
+    
+    
+    func speakDetectedObject(identifier: String) {
+        if !isSpeaking {
+            let speechUtterance = AVSpeechUtterance(string: identifier)
+            speechUtterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+            speechSynthesizer.speak(speechUtterance)
+            isSpeaking = true
+        }
+    }
+    
 }
     
 
-
+extension VisionObjectRecognitionViewController: AVSpeechSynthesizerDelegate {
+    
+    func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
+        isSpeaking = false
+    }
+}

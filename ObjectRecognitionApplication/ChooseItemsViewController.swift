@@ -1,7 +1,7 @@
 import UIKit
 import AVFoundation
 
-class OptionsViewController: UIViewController, AVSpeechSynthesizerDelegate  {
+class ChooseItemsViewController: UIViewController, AVSpeechSynthesizerDelegate  {
 
     lazy var fontManager = FontManager.shared
 
@@ -13,6 +13,7 @@ class OptionsViewController: UIViewController, AVSpeechSynthesizerDelegate  {
     var all_items = ["backpack", "handbag", "bottle", "cup", "knife", "bowl", "laptop", "remote", "cell phone", "book", "vase", "scissors", "toothbrush", "chair", "dog", "cat"]
 
     var buttonColors: [UIColor] = []
+
     var selected_items = [String]()
     var isConfirmationDone = false
     var visionObjectVC: VisionObjectRecognitionViewController!
@@ -43,7 +44,6 @@ class OptionsViewController: UIViewController, AVSpeechSynthesizerDelegate  {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    
     
     let confirmButton: UIButton = {
         let button = UIButton()
@@ -155,7 +155,7 @@ class OptionsViewController: UIViewController, AVSpeechSynthesizerDelegate  {
             button.titleLabel?.font = UIFont.systemFont(ofSize: currentFontSize)
         }
     
-        confirmButton.titleLabel?.font = UIFont.systemFont(ofSize: currentFontSize)
+        confirmButton.titleLabel?.font = UIFont.systemFont(ofSize: currentFontSize + 8)
         confirmButton.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(confirmButton)
 
@@ -167,10 +167,11 @@ class OptionsViewController: UIViewController, AVSpeechSynthesizerDelegate  {
         ])
     }
     
+    
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         
-        let buttonWidth = (view.bounds.width - 30) / 2 // subtracting 30 instead of 20 to account for the gap between the buttons
+        let buttonWidth = (view.bounds.width - 30) / 2
         let buttonHeight: CGFloat = 60
         let topMargin: CGFloat = 10.0
         let numberOfColumns = 2
@@ -180,7 +181,7 @@ class OptionsViewController: UIViewController, AVSpeechSynthesizerDelegate  {
             let col = i % numberOfColumns // modulus to determine column number
             let button = buttons[i]
             
-            let x = CGFloat(col) * (buttonWidth + 10) + 10 // adding 10 for gap between buttons
+            let x = CGFloat(col) * (buttonWidth + 10) + 10
             let y = topMargin + CGFloat(row) * (buttonHeight + 10)
             button.frame = CGRect(x: x, y: y, width: buttonWidth, height: buttonHeight)
         }
@@ -199,7 +200,7 @@ class OptionsViewController: UIViewController, AVSpeechSynthesizerDelegate  {
     @objc func fontSizeButtonTapped() {
         let newFontSize = fontManager.increaseFontSize()
         backButton.titleLabel?.font = UIFont.systemFont(ofSize: newFontSize)
-        confirmButton.titleLabel?.font = UIFont.systemFont(ofSize: newFontSize)
+        confirmButton.titleLabel?.font = UIFont.systemFont(ofSize: newFontSize + 8)
         titleLabel.font = UIFont.systemFont(ofSize: newFontSize + 5)
         
         for button in buttons {
@@ -228,19 +229,18 @@ class OptionsViewController: UIViewController, AVSpeechSynthesizerDelegate  {
         // save button colors to user defaults
         let savedButtonColors = buttonColors.map { try? NSKeyedArchiver.archivedData(withRootObject: $0, requiringSecureCoding: false) }
         UserDefaults.standard.set(savedButtonColors, forKey: "buttonColors")
-        
         UserDefaults.standard.set(selected_items, forKey: "selectedItems")
         
         guard let presentingVC = presentingViewController as? VisionObjectRecognitionViewController else {
             fatalError("Unable to get presenting view controller")
         }
+        
         visionObjectVC = presentingVC
         visionObjectVC.updateValue(selected_items)
 
     }
 
 
-    
     @objc func confirmButtonTapped() {
         if isConfirmationDone {
             return
@@ -260,6 +260,4 @@ class OptionsViewController: UIViewController, AVSpeechSynthesizerDelegate  {
         self.dismiss(animated: true, completion: nil)
     }
 
-
-        
 }
