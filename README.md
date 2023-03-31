@@ -13,7 +13,7 @@ On the main opening page, there are three buttons. Firstly, a large button at th
 
 ## Installation
 
-In order to install the app, simply clone or download the repo and open the project using XCode. Once opened, you should be able to simply run the project. You may then need to change the bundle identifier in the signing in & capabilities tab if this throws an error, as for all downloaded XCode projects. Note, the app requires the use of the devices camera and as such will require an apple device with one to be used to run and test the app. The app also contains a test suite which can be run using command + U.
+In order to install the app, you must be running macOS. Start by cloning or downloading the repo and open the project using XCode. Next, you need to download the object recognition model from - https://developer.apple.com/machine-learning/models/. After doing so, drag this into the project navigation tab. Ensure that the model name and the model read in the VisionObjectRecognitionViewController are the same. After this, you should be able to simply run the project. Note that you may need to change the bundle identifier in the signing in & capabilities tab if this throws an error, as for all downloaded XCode projects. The app also requires the use of the devices camera and as such will require an apple device with one to be used to run and test the app. Finally, you can run the test suite by running using command + U.
 
 ## Support
 
